@@ -33,17 +33,30 @@ For example:
 **To what floor do the instructions take Santa?**
 */
 
+// procedual style
 #[aoc(day1, part1)]
 fn part1(input: &str) -> i32 {
-    let mut s: i32 = 0;
-    for c in input.chars() {
-        if c == '(' {
-            s += 1
+    let mut sum: i32 = 0;
+    for char in input.chars() {
+        if char == '(' {
+            sum += 1
         } else {
-            s -= 1
+            sum -= 1
         }
     }
-    s
+    sum
+}
+
+// functional style
+#[aoc(day1, part1, alt1)]
+fn part1_alt1(input: &str) -> i32 {
+    input
+        .chars()
+        .map(|char| match char {
+            '(' => 1,
+            _ => -1,
+        })
+        .sum()
 }
 
 /**
@@ -61,7 +74,6 @@ For example:
 **What is the position of the character that causes Santa to first
 enter the basement?**
 */
-
 #[aoc(day1, part2)]
 fn part2(input: &str) -> usize {
     let mut s: i32 = 0;
@@ -72,10 +84,10 @@ fn part2(input: &str) -> usize {
             s -= 1
         }
         if s < 0 {
-            return idx + 1
+            return idx + 1;
         }
     }
-    return 0;
+    0
 }
 
 #[cfg(test)]
@@ -99,6 +111,7 @@ mod tests {
         assert_eq!(part1(")))"), -3);
         assert_eq!(part1(")())())"), -3);
     }
+
     #[test]
     fn part2_example() {
         // `)` causes him to enter the basement at character position `1`.
@@ -106,5 +119,4 @@ mod tests {
         // `()())` causes him to enter the basement at character position `5`.
         assert_eq!(part2("()())"), 5);
     }
-
 }
