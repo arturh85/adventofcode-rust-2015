@@ -38,10 +38,10 @@ For example:
 fn part1(input: &str) -> i32 {
     let mut sum: i32 = 0;
     for char in input.chars() {
-        if char == '(' {
-            sum += 1
-        } else {
-            sum -= 1
+        match char {
+            '(' => sum += 1,
+            ')' => sum -= 1,
+            _ => unreachable!(),
         }
     }
     sum
@@ -54,7 +54,8 @@ fn part1_alt1(input: &str) -> i32 {
         .chars()
         .map(|char| match char {
             '(' => 1,
-            _ => -1,
+            ')' => -1,
+            _ => unreachable!(),
         })
         .sum()
 }
@@ -75,19 +76,19 @@ For example:
 enter the basement?**
 */
 #[aoc(day1, part2)]
-fn part2(input: &str) -> usize {
-    let mut s: i32 = 0;
-    for (idx, c) in input.chars().enumerate() {
-        if c == '(' {
-            s += 1
-        } else {
-            s -= 1
+fn part2(input: &str) -> Option<usize> {
+    let mut sum: i32 = 0;
+    for (idx, char) in input.chars().enumerate() {
+        match char {
+            '(' => sum += 1,
+            ')' => sum -= 1,
+            _ => {}
         }
-        if s < 0 {
-            return idx + 1;
+        if sum < 0 {
+            return Some(idx + 1);
         }
     }
-    0
+    None
 }
 
 #[cfg(test)]
@@ -111,12 +112,11 @@ mod tests {
         assert_eq!(part1(")))"), -3);
         assert_eq!(part1(")())())"), -3);
     }
-
     #[test]
     fn part2_example() {
         // `)` causes him to enter the basement at character position `1`.
-        assert_eq!(part2(")"), 1);
+        assert_eq!(part2(")"), Some(1));
         // `()())` causes him to enter the basement at character position `5`.
-        assert_eq!(part2("()())"), 5);
+        assert_eq!(part2("()())"), Some(5));
     }
 }

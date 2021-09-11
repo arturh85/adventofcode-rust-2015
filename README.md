@@ -17,11 +17,11 @@ see https://github.com/gobanos/cargo-aoc
 
 ## Install `cargo aoc`
 
-`cargo-aoc` is hosted as a binary on crates.io.
-Boot a terminal and install the program using `cargo install cargo-aoc`
+Boot a terminal and run `cargo install cargo-aoc`
 
 If you installed `cargo-aoc` in a previous year, it may be out of date now and this
-will cause build errors because of a version mismatch if you use the latest version of the `aoc-runner` and `aoc-runner-derive` below. If that's the case, then update it with `cargo install cargo-aoc --force`.
+will cause build errors because of a version mismatch if you use the latest version of the `aoc-runner` and `aoc-runner-derive` below. 
+If that's the case, then update it with `cargo install cargo-aoc --force`.
 
 ## Setting up the CLI
 
@@ -39,6 +39,10 @@ NOTE: If for some reason your token has changed, dont forget to change it back.
 `cargo aoc credentials` will show the currently stored user token
 
 
-## Running the Problems
+## Running the latest Problem
 
 `cargo aoc`
+
+## Running a specific Day
+
+`cargo aoc -d 2`
