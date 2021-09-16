@@ -27,11 +27,10 @@ For example:
 #[aoc(day4, part1)]
 fn part1(input: &str) -> u64 {
     let mut hasher = Md5::new();
+    let mut output = [0; 16]; // An MD5 is 16 bytes
     for i in 0..u64::MAX {
         hasher.input(input.as_bytes());
         hasher.input(i.to_string().as_bytes());
-
-        let mut output = [0; 16]; // An MD5 is 16 bytes
         hasher.result(&mut output);
 
         let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
