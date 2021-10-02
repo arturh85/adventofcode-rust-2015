@@ -64,6 +64,7 @@ In little Bobby's kit's instructions booklet (provided as your puzzle input),
 **what signal is ultimately provided to wire `a`?**
 */
 
+#[derive(PartialEq, Debug)]
 enum RegisterOrValue {
     Register(String),
     Value(u16),
@@ -140,7 +141,7 @@ fn apply_line(line: &str, data: &HashMap<String, u16>) -> (String, u16) {
             RegisterOrValue::Value(value) => value,
         }
     };
-    let (_, operation) = parse_line(line).unwrap();
+    let (_, operation) = parse_line(line).expect("failed to parse line");
 
     match operation {
         Operation::Set(value, target) => (target, resolve(value)),
@@ -152,30 +153,52 @@ fn apply_line(line: &str, data: &HashMap<String, u16>) -> (String, u16) {
     }
 }
 
-fn run(input: &str) -> HashMap<String, u16> {
-    let mut result = HashMap::new();
+fn run(input: &str, mut data: HashMap<String, u16>) -> HashMap<String, u16> {
     for line in input.lines() {
-        let (key, value) = apply_line(line, &result);
-        result.insert(key, value);
+        let (key, value) = apply_line(line, &data);
+        data.insert(key, value);
     }
-    result
+    data
 }
 
 #[aoc(day7, part1)]
 fn part1(input: &str) -> u16 {
-    let results = run(input);
+    let results = run(input, HashMap::new());
     // println!("{:?}", results);
     *results.get("a").unwrap()
 }
 
-// #[aoc(day7, part2)]
-// fn part2(_input: &str) -> usize {
-//     todo!();
-// }
+/**
+# --- Part Two ---
+Now, take the signal you got on wire a, override wire b to that signal, and reset the other wires
+(including wire a).
+
+**What new signal is ultimately provided to wire a?**
+*/
+#[aoc(day7, part2)]
+fn part2(input: &str) -> u16 {
+    let mut results = run(input, HashMap::new());
+    results.insert("b".into(), results["a"]);
+    let results = run(input, results);
+    // println!("{:?}", results);
+    *results.get("a").unwrap()
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_parse_pov() {
+        assert_eq!(
+            parse_register_or_value("foo!").unwrap(),
+            ("!", RegisterOrValue::Register("foo".into()))
+        );
+        assert_eq!(
+            parse_register_or_value("123!").unwrap(),
+            ("!", RegisterOrValue::Value(123))
+        );
+    }
 
     #[test]
     fn part1_example() {
@@ -188,7 +211,7 @@ x LSHIFT 2 -> f
 y RSHIFT 2 -> g
 NOT x -> h
 NOT y -> i";
-        let result = run(input);
+        let result = run(input, HashMap::new());
         // println!("{:?}", result);
         // After it is run, these are the signals on the wires:
         assert_eq!(result["d"], 72);
@@ -200,7 +223,4 @@ NOT y -> i";
         assert_eq!(result["x"], 123);
         assert_eq!(result["y"], 456);
     }
-
-    #[test]
-    fn part2_examples() {}
 }
