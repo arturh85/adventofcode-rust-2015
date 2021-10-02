@@ -71,12 +71,12 @@ enum RegisterOrValue {
 }
 
 enum Operation {
-    Set(RegisterOrValue, String),
-    BinaryAnd(RegisterOrValue, RegisterOrValue, String),
-    BinaryOr(RegisterOrValue, RegisterOrValue, String),
-    BinaryNot(RegisterOrValue, String),
-    LeftShift(RegisterOrValue, RegisterOrValue, String),
-    RightShift(RegisterOrValue, RegisterOrValue, String),
+    Set(RegisterOrValue),
+    BinaryAnd(RegisterOrValue, RegisterOrValue),
+    BinaryOr(RegisterOrValue, RegisterOrValue),
+    BinaryNot(RegisterOrValue),
+    LeftShift(RegisterOrValue, RegisterOrValue),
+    RightShift(RegisterOrValue, RegisterOrValue),
 }
 
 fn parse_register_or_value(input: &str) -> nom::IResult<&str, RegisterOrValue, ()> {
@@ -89,42 +89,42 @@ fn parse_register_or_value(input: &str) -> nom::IResult<&str, RegisterOrValue, (
     }
 }
 
-fn parse_line(line: &str) -> nom::IResult<&str, Operation, ()> {
-    let assign = tag::<&str, &str, ()>(" -> ");
+fn parse_line(line: &str) -> nom::IResult<&str, (Operation, String), ()> {
+    let parse_assign = tag::<&str, &str, ()>(" -> ");
     Ok(match tag::<&str, &str, ()>("NOT ")(line) {
         Ok((tail, _)) => {
             let (tail, rov) = parse_register_or_value(tail)?;
-            let (tail, _) = assign(tail)?;
-            (tail, Operation::BinaryNot(rov, tail.into()))
+            let (tail, _) = parse_assign(tail)?;
+            (tail, (Operation::BinaryNot(rov), tail.into()))
         }
         _ => {
             let (tail, left) = parse_register_or_value(line)?;
 
-            match assign(tail) {
-                Ok((tail, _)) => (tail, Operation::Set(left, tail.into())),
+            match parse_assign(tail) {
+                Ok((tail, _)) => (tail, (Operation::Set(left), tail.into())),
                 _ => match tag::<&str, &str, ()>(" AND ")(tail) {
                     Ok((tail, _)) => {
                         let (tail, right) = parse_register_or_value(tail)?;
-                        let (tail, _) = assign(tail)?;
-                        (tail, Operation::BinaryAnd(left, right, tail.into()))
+                        let (tail, _) = parse_assign(tail)?;
+                        (tail, (Operation::BinaryAnd(left, right), tail.into()))
                     }
                     _ => match tag::<&str, &str, ()>(" OR ")(tail) {
                         Ok((tail, _)) => {
                             let (tail, right) = parse_register_or_value(tail)?;
-                            let (tail, _) = assign(tail)?;
-                            (tail, Operation::BinaryOr(left, right, tail.into()))
+                            let (tail, _) = parse_assign(tail)?;
+                            (tail, (Operation::BinaryOr(left, right), tail.into()))
                         }
                         _ => match tag::<&str, &str, ()>(" LSHIFT ")(tail) {
                             Ok((tail, _)) => {
                                 let (tail, right) = parse_register_or_value(tail)?;
-                                let (tail, _) = assign(tail)?;
-                                (tail, Operation::LeftShift(left, right, tail.into()))
+                                let (tail, _) = parse_assign(tail)?;
+                                (tail, (Operation::LeftShift(left, right), tail.into()))
                             }
                             _ => {
                                 let (tail, _) = tag::<&str, &str, ()>(" RSHIFT ")(tail)?;
                                 let (tail, right) = parse_register_or_value(tail)?;
-                                let (tail, _) = assign(tail)?;
-                                (tail, Operation::RightShift(left, right, tail.into()))
+                                let (tail, _) = parse_assign(tail)?;
+                                (tail, (Operation::RightShift(left, right), tail.into()))
                             }
                         },
                     },
@@ -134,38 +134,46 @@ fn parse_line(line: &str) -> nom::IResult<&str, Operation, ()> {
     })
 }
 
-fn apply_line(line: &str, data: &HashMap<String, u16>) -> (String, u16) {
-    let resolve = |rov: RegisterOrValue| -> u16 {
+fn eval_register(
+    register: &str,
+    ops: &HashMap<String, Operation>,
+    cache: &mut HashMap<String, u16>,
+) -> u16 {
+    if cache.contains_key(register) {
+        return cache[register];
+    }
+    let mut resolve = |rov: &RegisterOrValue| -> u16 {
         match rov {
-            RegisterOrValue::Register(name) => *data.get(&name).unwrap_or(&0),
-            RegisterOrValue::Value(value) => value,
+            RegisterOrValue::Register(name) => eval_register(&name, ops, cache),
+            RegisterOrValue::Value(value) => *value,
         }
     };
-    let (_, operation) = parse_line(line).expect("failed to parse line");
-
-    match operation {
-        Operation::Set(value, target) => (target, resolve(value)),
-        Operation::BinaryAnd(left, right, target) => (target, resolve(left) & resolve(right)),
-        Operation::BinaryOr(left, right, target) => (target, resolve(left) | resolve(right)),
-        Operation::BinaryNot(value, target) => (target, !resolve(value)),
-        Operation::LeftShift(value, amount, target) => (target, resolve(value) << resolve(amount)),
-        Operation::RightShift(value, amount, target) => (target, resolve(value) >> resolve(amount)),
-    }
+    let result = match &ops[register] {
+        Operation::Set(value) => resolve(value),
+        Operation::BinaryAnd(left, right) => resolve(left) & resolve(right),
+        Operation::BinaryOr(left, right) => resolve(left) | resolve(right),
+        Operation::BinaryNot(value) => !resolve(value),
+        Operation::LeftShift(value, amount) => resolve(value) << resolve(amount),
+        Operation::RightShift(value, amount) => resolve(value) >> resolve(amount),
+    };
+    cache.insert(register.into(), result);
+    result
 }
 
-fn run(input: &str, mut data: HashMap<String, u16>) -> HashMap<String, u16> {
+fn parse_ops(input: &str) -> HashMap<String, Operation> {
+    let mut ops: HashMap<String, Operation> = HashMap::new();
     for line in input.lines() {
-        let (key, value) = apply_line(line, &data);
-        data.insert(key, value);
+        let (_, (op, key)) = parse_line(line).unwrap();
+        ops.insert(key, op);
     }
-    data
+    ops
 }
 
 #[aoc(day7, part1)]
 fn part1(input: &str) -> u16 {
-    let results = run(input, HashMap::new());
-    // println!("{:?}", results);
-    *results.get("a").unwrap()
+    let ops = parse_ops(input);
+    let mut cache = HashMap::new();
+    eval_register("a", &ops, &mut cache)
 }
 
 /**
@@ -177,11 +185,13 @@ Now, take the signal you got on wire a, override wire b to that signal, and rese
 */
 #[aoc(day7, part2)]
 fn part2(input: &str) -> u16 {
-    let mut results = run(input, HashMap::new());
-    results.insert("b".into(), results["a"]);
-    let results = run(input, results);
-    // println!("{:?}", results);
-    *results.get("a").unwrap()
+    let ops = parse_ops(input);
+    let mut cache = HashMap::new();
+    let a = eval_register("a", &ops, &mut cache);
+    let mut ops = parse_ops(input);
+    let mut cache = HashMap::new();
+    ops.insert("b".into(), Operation::Set(RegisterOrValue::Value(a)));
+    eval_register("a", &ops, &mut cache)
 }
 
 #[cfg(test)]
@@ -211,16 +221,16 @@ x LSHIFT 2 -> f
 y RSHIFT 2 -> g
 NOT x -> h
 NOT y -> i";
-        let result = run(input, HashMap::new());
-        // println!("{:?}", result);
+        let ops = parse_ops(input);
+        let mut cache = HashMap::new();
         // After it is run, these are the signals on the wires:
-        assert_eq!(result["d"], 72);
-        assert_eq!(result["e"], 507);
-        assert_eq!(result["f"], 492);
-        assert_eq!(result["g"], 114);
-        assert_eq!(result["h"], 65412);
-        assert_eq!(result["i"], 65079);
-        assert_eq!(result["x"], 123);
-        assert_eq!(result["y"], 456);
+        assert_eq!(eval_register("d", &ops, &mut cache), 72);
+        assert_eq!(eval_register("e", &ops, &mut cache), 507);
+        assert_eq!(eval_register("f", &ops, &mut cache), 492);
+        assert_eq!(eval_register("g", &ops, &mut cache), 114);
+        assert_eq!(eval_register("h", &ops, &mut cache), 65412);
+        assert_eq!(eval_register("i", &ops, &mut cache), 65079);
+        assert_eq!(eval_register("x", &ops, &mut cache), 123);
+        assert_eq!(eval_register("y", &ops, &mut cache), 456);
     }
 }
