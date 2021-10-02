@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 /**
 # [Day 3: Perfectly Spherical Houses in a Vacuum](https://adventofcode.com/2015/day/3)
+
 Santa is delivering presents to an infinite two-dimensional grid of houses.
 
 He begins by delivering a present to the house at his starting location, and

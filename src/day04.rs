@@ -2,7 +2,7 @@ use crypto::digest::Digest;
 use crypto::md5::Md5;
 
 /**
---- Day 4: The Ideal Stocking Stuffer ---
+# [Day 4: The Ideal Stocking Stuffer](https://adventofcode.com/2015/day/4)
 
 Santa needs help [mining](https://en.wikipedia.org/wiki/Bitcoin#Mining) some AdventCoins
 (very similar to [bitcoins](https://en.wikipedia.org/wiki/Bitcoin)) to use as gifts for all

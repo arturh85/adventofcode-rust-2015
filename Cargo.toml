@@ -6,8 +6,8 @@ edition = "2018"
 [dependencies]
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
-#regex = "*"
-#lazy_static = "*"
-itertools = "*"
-rust-crypto = "*"
-unicode-segmentation = "*"
+
+itertools = "*" # day 03
+rust-crypto = "*" # day 04
+unicode-segmentation = "*" # day 05
+nom = "*" # day 07

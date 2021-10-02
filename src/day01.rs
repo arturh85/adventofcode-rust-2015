@@ -33,7 +33,7 @@ For example:
 **To what floor do the instructions take Santa?**
 */
 
-// procedual style
+// procedural style
 #[aoc(day1, part1)]
 fn part1(input: &str) -> i32 {
     let mut sum: i32 = 0;

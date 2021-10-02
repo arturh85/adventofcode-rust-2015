@@ -120,7 +120,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn part1_example() {
+    fn part1_examples() {
         // `ugknbfddgicrmopn` is nice because it has at least three vowels (`u...i...o...`),
         //     a double letter (`...dd...`), and none of the disallowed substrings.
         assert_eq!(is_nice1("ugknbfddgicrmopn"), true);
@@ -138,8 +138,9 @@ mod tests {
         // `dvszwmarrgswjxmb` is naughty because it contains only one vowel.
         assert_eq!(is_nice1("dvszwmarrgswjxmb"), false);
     }
+
     #[test]
-    fn part2_example() {
+    fn part2_examples() {
         // `qjhvhtzxzqqjkmpb` is nice because is has a pair that appears twice (`qj`) and a letter
         // that repeats with exactly one letter between them (`zxz`).
         assert_eq!(is_nice2("qjhvhtzxzqqjkmpb"), true, "a");
@@ -155,5 +156,12 @@ mod tests {
         // `ieodomkazucvgmuy` is naughty because it has a repeating letter with one between (`odo`),
         //     but no pair that appears twice.
         assert_eq!(is_nice2("ieodomkazucvgmuy"), false, "f");
+    }
+
+    #[test]
+    fn test_emojis() {
+        // `qjhvhtzxzqqjkmpb` is nice because is has a pair that appears twice (`qj`) and a letter
+        // that repeats with exactly one letter between them (`zxz`).
+        assert_eq!(has_double_letter("🐂🐂"), true);
     }
 }
