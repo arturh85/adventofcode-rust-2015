@@ -1,43 +1,9 @@
 # Advent of Code 2015 in [Rust](https://www.rust-lang.org/)
 
-```
-AOC 2015
-Day 1 - Part 1 : 232
-        generator: 400ns,
-        runner: 17.9µs
+- [Docs](https://arturh85.github.io/adventofcode-rust-2015/adventofcode_rust_2015/)
+- [Timings](https://arturh85.github.io/adventofcode-rust-2015/timings.txt)
 
-Day 1 - Part 1 - alt1 : 232
-        generator: 200ns,
-        runner: 18.6µs
 
-Day 1 - Part 2 : 1783
-        generator: 100ns,
-        runner: 5.5µs
-
-Day 2 - Part 1 : 1586300
-        generator: 169.2µs,
-        runner: 500ns
-
-Day 2 - Part 2 : 3737498
-        generator: 148.9µs,
-        runner: 700ns
-
-Day 3 - Part 1 : 2565
-        generator: 800ns,
-        runner: 492µs
-
-Day 3 - Part 2 : 2639
-        generator: 200ns,
-        runner: 388.2µs
-	
-Day 4 - Part 1 : 346386
-	generator: 200ns,
-	runner: 55.2363ms
-
-Day 4 - Part 2 : 9958218
-	generator: 100ns,
-	runner: 1.3883396s
-```
 
 # Setup
 

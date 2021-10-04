@@ -7,8 +7,8 @@
 //! To do this, he needs to find [MD5](https://en.wikipedia.org/wiki/MD5) hashes which,
 //! in [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal), start with at least five zeroes.
 //! The input to the MD5 hash is some secret key (your puzzle input, given below) followed by a
-//! number in decimal. To mine AdventCoins, you must find Santa the lowest positive
-//! number (no leading zeroes: `1`, `2`, `3`, ...) that produces such a hash.
+//! number in decimal. To mine AdventCoins, **you must find Santa the lowest positive
+//! number (no leading zeroes: `1`, `2`, `3`, ...) that produces such a hash.**
 //!
 //! For example:
 //!

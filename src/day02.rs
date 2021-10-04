@@ -43,14 +43,14 @@
 //! - A present with dimensions `1x1x10` requires `1+1+1+1 = 4` feet of ribbon to wrap the present
 //! plus `1*1*10 = 10` feet of ribbon for the bow, for a total of `14` feet.
 //!
-//! How many total feet of ribbon should they order?
+//! **How many total feet of ribbon should they order?**
 
 #[aoc_generator(day2)]
 fn parse_input_day2(input: &str) -> Result<Vec<Present>, std::num::ParseIntError> {
     input
         .lines()
         .map(|l| {
-            /// l = 2x3x4
+            // l = 2x3x4
             l.split('x')
                 .map(|f| f.parse::<u32>())
                 .collect::<Result<Vec<u32>, std::num::ParseIntError>>()

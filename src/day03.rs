@@ -29,7 +29,7 @@
 //! starting house), then take turns moving based on instructions from the elf, who is eggnoggedly
 //! reading from the same script as the previous year.
 //!
-//! This year, how many houses receive at least one present?
+//! **This year, how many houses receive at least one present?**
 //!
 //! For example:
 //!
