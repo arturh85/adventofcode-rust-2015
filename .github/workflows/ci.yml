@@ -15,8 +15,8 @@ jobs:
           toolchain: stable
       - name: 🗃️ cache Rust
         uses: Swatinem/rust-cache@v1
-      - name: ⚡ install cargo tauri-bundler
-        run: cargo install aoc
+      - name: ⚡ install cargo aoc
+        run: cargo install cargo-aoc
       - name: ⚡ install apt webkit2gtk (ubuntu only)
         if: matrix.platform == 'ubuntu-latest'
         run: |
