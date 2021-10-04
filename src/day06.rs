@@ -48,40 +48,18 @@
 use std::ops::Add;
 
 // Solution Source: https://www.reddit.com/r/adventofcode/comments/3vmltn/day_6_solutions/cxptu4a/
+// TODO: rewrite using nom?
 
 /// Part 1
 #[aoc(day6, part1)]
 pub fn part1(input: &str) -> usize {
     count(input, turn_on1, turn_off1, toggle1)
 }
-struct Grid<T> {
-    data: Vec<T>,
-}
 
-impl<T> Grid<T> {
-    fn operation<F: Fn(&mut T)>(&mut self, x1: usize, y1: usize, x2: usize, y2: usize, f: F) {
-        for j in y1..(y2 + 1) {
-            for i in x1..(x2 + 1) {
-                f(&mut self.data[i + j * 1000]);
-            }
-        }
-    }
-}
-
-trait GridCount {
-    fn count(&self) -> usize;
-}
-
-impl GridCount for Grid<bool> {
-    fn count(&self) -> usize {
-        self.data.iter().filter(|&s| *s).count()
-    }
-}
-
-impl GridCount for Grid<u32> {
-    fn count(&self) -> usize {
-        self.data.iter().fold(0u32, Add::add) as usize
-    }
+/// Part 2
+#[aoc(day6, part2)]
+pub fn part2(input: &str) -> usize {
+    count(input, turn_on2, turn_off2, toggle2)
 }
 
 fn count<T>(input: &str, on: fn(&mut T), off: fn(&mut T), toggle: fn(&mut T)) -> usize
@@ -117,6 +95,36 @@ where
     grid.count()
 }
 
+struct Grid<T> {
+    data: Vec<T>,
+}
+
+impl<T> Grid<T> {
+    fn operation<F: Fn(&mut T)>(&mut self, x1: usize, y1: usize, x2: usize, y2: usize, f: F) {
+        for j in y1..(y2 + 1) {
+            for i in x1..(x2 + 1) {
+                f(&mut self.data[i + j * 1000]);
+            }
+        }
+    }
+}
+
+trait GridCount {
+    fn count(&self) -> usize;
+}
+
+impl GridCount for Grid<bool> {
+    fn count(&self) -> usize {
+        self.data.iter().filter(|&s| *s).count()
+    }
+}
+
+impl GridCount for Grid<u32> {
+    fn count(&self) -> usize {
+        self.data.iter().fold(0u32, Add::add) as usize
+    }
+}
+
 fn turn_on1(b: &mut bool) {
     *b = true
 }
@@ -134,12 +142,6 @@ fn eat(s: &mut &str, expect: &str) -> bool {
     } else {
         false
     }
-}
-
-/// Part 2
-#[aoc(day6, part2)]
-pub fn part2(input: &str) -> usize {
-    count(input, turn_on2, turn_off2, toggle2)
 }
 
 fn turn_on2(i: &mut u32) {

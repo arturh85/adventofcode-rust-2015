@@ -45,31 +45,15 @@
 //!
 //! How many total feet of ribbon should they order?
 
-use std::num::ParseIntError;
-
-struct Present {
-    l: u32,
-    w: u32,
-    h: u32,
-}
-
-impl Present {
-    fn paper_required(&self) -> u32 {
-        3 * self.l * self.w + 2 * self.w * self.h + 2 * self.h * self.l
-    }
-    fn ribbon_required(&self) -> u32 {
-        2 * (self.l + self.w) + (self.l * self.w) * self.h
-    }
-}
-
 #[aoc_generator(day2)]
-fn parse_input_day2(input: &str) -> Result<Vec<Present>, ParseIntError> {
+fn parse_input_day2(input: &str) -> Result<Vec<Present>, std::num::ParseIntError> {
     input
         .lines()
         .map(|l| {
+            /// l = 2x3x4
             l.split('x')
                 .map(|f| f.parse::<u32>())
-                .collect::<Result<Vec<u32>, ParseIntError>>()
+                .collect::<Result<Vec<u32>, std::num::ParseIntError>>()
                 .map(|mut p| {
                     p.sort();
                     Present {
@@ -100,13 +84,27 @@ pub fn part2(presents: &[Present]) -> u32 {
         .sum()
 }
 
+pub struct Present {
+    l: u32,
+    w: u32,
+    h: u32,
+}
+
+impl Present {
+    fn paper_required(&self) -> u32 {
+        3 * self.l * self.w + 2 * self.w * self.h + 2 * self.h * self.l
+    }
+    fn ribbon_required(&self) -> u32 {
+        2 * (self.l + self.w) + (self.l * self.w) * self.h
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    // 1586300 - correct
-    // 1589071
+
     #[test]
-    fn part1_example() {
+    fn part1_examples() {
         let present234 = Present { l: 2, w: 3, h: 4 };
         /* A present with dimensions `2x3x4` requires `2*6 + 2*12 + 2*8 = 52` square
         feet of wrapping paper plus `6` square feet of slack, for a total of `58`
@@ -121,7 +119,7 @@ mod tests {
     }
 
     #[test]
-    fn part2_example() {
+    fn part2_examples() {
         let present234 = Present { l: 2, w: 3, h: 4 };
         /* A present with dimensions `2x3x4` requires `2+2+3+3 = 10` feet of ribbon to wrap the
         present plus `2*3*4 = 24` feet of ribbon for the bow, for a total of `34` feet. */
@@ -132,12 +130,4 @@ mod tests {
         let present1110 = Present { l: 1, w: 1, h: 10 };
         assert_eq!(present1110.ribbon_required(), 14);
     }
-
-    // #[test]
-    // fn part2_example() {
-    //     // `)` causes him to enter the basement at character position `1`.
-    //     assert_eq!(part2(")"), 1);
-    //     // `()())` causes him to enter the basement at character position `5`.
-    //     assert_eq!(part2("()())"), 5);
-    // }
 }

@@ -47,6 +47,26 @@
 //!
 //! How many strings are nice under these new rules?
 
+/// Part 1
+#[aoc(day5, part1)]
+pub fn part1(input: &str) -> usize {
+    input.lines().filter(|line| is_nice1(line)).count()
+}
+
+/// Part 2
+#[aoc(day5, part2)]
+pub fn part2(input: &str) -> usize {
+    input.lines().filter(|line| is_nice2(line)).count()
+}
+
+fn is_nice1(input: &str) -> bool {
+    has_three_vowels(input) && has_double_letter(input) && !has_invalid(input)
+}
+
+fn is_nice2(input: &str) -> bool {
+    has_pair_twice_without_overlapping(input) && has_repeat_with_gap(input)
+}
+
 fn has_three_vowels(s: &str) -> bool {
     s.chars()
         .filter(|c| *c == 'a' || *c == 'e' || *c == 'i' || *c == 'o' || *c == 'u')
@@ -65,16 +85,6 @@ fn has_double_letter(s: &str) -> bool {
         }
     }
     false
-}
-
-fn is_nice1(input: &str) -> bool {
-    has_three_vowels(input) && has_double_letter(input) && !has_invalid(input)
-}
-
-/// Part 1
-#[aoc(day5, part1)]
-pub fn part1(input: &str) -> usize {
-    input.lines().filter(|line| is_nice1(line)).count()
 }
 
 fn has_pair_twice_without_overlapping(input: &str) -> bool {
@@ -101,16 +111,6 @@ fn has_repeat_with_gap(input: &str) -> bool {
         }
     }
     false
-}
-
-fn is_nice2(input: &str) -> bool {
-    has_pair_twice_without_overlapping(input) && has_repeat_with_gap(input)
-}
-
-/// Part 2
-#[aoc(day5, part2)]
-pub fn part2(input: &str) -> usize {
-    input.lines().filter(|line| is_nice2(line)).count()
 }
 
 #[cfg(test)]

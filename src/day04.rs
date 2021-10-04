@@ -23,20 +23,17 @@
 //! Now find one that starts with **six zeroes**.
 
 use crypto::digest::Digest;
-use crypto::md5::Md5;
 
-/// Part 1
-#[aoc(day4, part1)]
-pub fn part1(input: &str) -> u64 {
-    let mut hasher = Md5::new();
+/// increments a counter starting at 0 which is appended to `input` until `test` returns
+/// true for the md5 hash buffer, then returns the counter
+pub fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
+    let mut hasher = crypto::md5::Md5::new();
     let mut output = [0; 16]; // An MD5 is 16 bytes
     for i in 0..u64::MAX {
         hasher.input(input.as_bytes());
         hasher.input(i.to_string().as_bytes());
         hasher.result(&mut output);
-
-        let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
-        if first_five == 0 {
+        if test(&output) {
             return i;
         }
         hasher.reset();
@@ -44,24 +41,22 @@ pub fn part1(input: &str) -> u64 {
     0
 }
 
+/// Part 1
+#[aoc(day4, part1)]
+pub fn part1(input: &str) -> u64 {
+    md5_suffix_increment_until(input, |output| {
+        let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
+        first_five == 0
+    })
+}
+
 /// Part 2
 #[aoc(day4, part2)]
 pub fn part2(input: &str) -> u64 {
-    let mut hasher = Md5::new();
-    for i in 0..u64::MAX {
-        hasher.input(input.as_bytes());
-        hasher.input(i.to_string().as_bytes());
-
-        let mut output = [0; 16]; // An MD5 is 16 bytes
-        hasher.result(&mut output);
-
+    md5_suffix_increment_until(input, |output| {
         let first_six = output[0] as i32 + output[1] as i32 + output[2] as i32;
-        if first_six == 0 {
-            return i;
-        }
-        hasher.reset();
-    }
-    0
+        first_six == 0
+    })
 }
 
 #[cfg(test)]

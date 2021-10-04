@@ -39,13 +39,19 @@
 //! -   `^v^v^v^v^v` now delivers presents to `11` houses, with Santa going one direction
 //! and Robo-Santa going the other.
 
-use itertools::{Either, Itertools};
+use itertools::Itertools;
 use std::collections::HashMap;
 
 /// Part 1
 #[aoc(day3, part1)]
 pub fn part1(input: &str) -> usize {
     steps(input).len()
+}
+
+/// Part 2
+#[aoc(day3, part2)]
+pub fn part2(input: &str) -> usize {
+    split_merge_steps(input)
 }
 
 type Point = (i32, i32);
@@ -70,21 +76,15 @@ fn steps(s: &str) -> HashMap<Point, u32> {
 fn split_merge_steps(s: &str) -> usize {
     let (even, odd): (String, String) = s.chars().enumerate().partition_map(|(idx, c)| {
         if idx % 2 == 0 {
-            Either::Left(c)
+            itertools::Either::Left(c)
         } else {
-            Either::Right(c)
+            itertools::Either::Right(c)
         }
     });
     let mut even = steps(&even);
     let odd = steps(&odd);
     even.extend(odd.into_iter());
     return even.len();
-}
-
-/// Part 2
-#[aoc(day3, part2)]
-pub fn part2(input: &str) -> usize {
-    split_merge_steps(input)
 }
 
 #[cfg(test)]

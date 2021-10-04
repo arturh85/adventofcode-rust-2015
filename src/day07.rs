@@ -35,17 +35,20 @@
 //! For example, here is a simple circuit:
 //!
 //!
-//! 123 -> x
-//! 456 -> y
-//! x AND y -> d
-//! x OR y -> e
-//! x LSHIFT 2 -> f
-//! y RSHIFT 2 -> g
+//! ```plain
+//! 123 -> x  
+//! 456 -> y  
+//! x AND y -> d  
+//! x OR y -> e  
+//! x LSHIFT 2 -> f  
+//! y RSHIFT 2 -> g  
 //! NOT x -> h
 //! NOT y -> i
+//! ```
 //!
 //! After it is run, these are the signals on the wires:
 //!
+//! ```plain
 //! d: 72
 //! e: 507
 //! f: 492
@@ -54,6 +57,7 @@
 //! i: 65079
 //! x: 123
 //! y: 456
+//! ```
 //!
 //! In little Bobby's kit's instructions booklet (provided as your puzzle input),
 //! **what signal is ultimately provided to wire `a`?**
@@ -64,17 +68,34 @@
 //!
 //! **What new signal is ultimately provided to wire a?**
 
+/// Part 1
+#[aoc(day7, part1)]
+pub fn part1(input: &str) -> u16 {
+    let gates = parse_gates(input);
+    let mut cache = HashMap::new();
+    eval_wire("a", &gates, &mut cache)
+}
+
+/// Part 2
+#[aoc(day7, part2)]
+pub fn part2(input: &str) -> u16 {
+    let mut gates = parse_gates(input);
+    let a = eval_wire("a", &gates, &mut HashMap::new());
+    gates.insert("b".into(), Gate::Set(Expr::Value(a)));
+    eval_wire("a", &gates, &mut HashMap::new())
+}
+
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, digit1};
 use std::collections::HashMap;
 
 #[derive(PartialEq, Debug)]
 enum Expr {
-    Register(String),
+    Wire(String),
     Value(u16),
 }
 
-enum Operation {
+enum Gate {
     Set(Expr),
     BinaryNot(Expr),
     BinaryAnd(Expr, Expr),
@@ -85,7 +106,7 @@ enum Operation {
 
 fn parse_expr(input: &str) -> nom::IResult<&str, Expr, ()> {
     match alpha1::<&str, ()>(input) {
-        Ok((tail, alpha)) => Ok((tail, Expr::Register(alpha.into()))),
+        Ok((tail, alpha)) => Ok((tail, Expr::Wire(alpha.into()))),
         _ => {
             let (tail, digit) = digit1(input)?;
             Ok((tail, Expr::Value(digit.parse().unwrap())))
@@ -93,42 +114,42 @@ fn parse_expr(input: &str) -> nom::IResult<&str, Expr, ()> {
     }
 }
 
-fn parse_op(line: &str) -> nom::IResult<&str, (Operation, String), ()> {
+fn parse_gate(line: &str) -> nom::IResult<&str, (Gate, String), ()> {
     let parse_assign = tag::<&str, &str, ()>(" -> ");
     Ok(match tag::<&str, &str, ()>("NOT ")(line) {
         Ok((tail, _)) => {
             let (tail, rov) = parse_expr(tail)?;
             let (tail, _) = parse_assign(tail)?;
-            (tail, (Operation::BinaryNot(rov), tail.into()))
+            (tail, (Gate::BinaryNot(rov), tail.into()))
         }
         _ => {
             let (tail, left) = parse_expr(line)?;
 
             match parse_assign(tail) {
-                Ok((tail, _)) => (tail, (Operation::Set(left), tail.into())),
+                Ok((tail, _)) => (tail, (Gate::Set(left), tail.into())),
                 _ => match tag::<&str, &str, ()>(" AND ")(tail) {
                     Ok((tail, _)) => {
                         let (tail, right) = parse_expr(tail)?;
                         let (tail, _) = parse_assign(tail)?;
-                        (tail, (Operation::BinaryAnd(left, right), tail.into()))
+                        (tail, (Gate::BinaryAnd(left, right), tail.into()))
                     }
                     _ => match tag::<&str, &str, ()>(" OR ")(tail) {
                         Ok((tail, _)) => {
                             let (tail, right) = parse_expr(tail)?;
                             let (tail, _) = parse_assign(tail)?;
-                            (tail, (Operation::BinaryOr(left, right), tail.into()))
+                            (tail, (Gate::BinaryOr(left, right), tail.into()))
                         }
                         _ => match tag::<&str, &str, ()>(" LSHIFT ")(tail) {
                             Ok((tail, _)) => {
                                 let (tail, right) = parse_expr(tail)?;
                                 let (tail, _) = parse_assign(tail)?;
-                                (tail, (Operation::LeftShift(left, right), tail.into()))
+                                (tail, (Gate::LeftShift(left, right), tail.into()))
                             }
                             _ => {
                                 let (tail, _) = tag::<&str, &str, ()>(" RSHIFT ")(tail)?;
                                 let (tail, right) = parse_expr(tail)?;
                                 let (tail, _) = parse_assign(tail)?;
-                                (tail, (Operation::RightShift(left, right), tail.into()))
+                                (tail, (Gate::RightShift(left, right), tail.into()))
                             }
                         },
                     },
@@ -138,70 +159,40 @@ fn parse_op(line: &str) -> nom::IResult<&str, (Operation, String), ()> {
     })
 }
 
-fn eval_register(
-    register: &str,
-    ops: &HashMap<String, Operation>,
-    cache: &mut HashMap<String, u16>,
-) -> u16 {
-    if cache.contains_key(register) {
-        return cache[register];
+fn eval_wire(wire: &str, gates: &HashMap<String, Gate>, cache: &mut HashMap<String, u16>) -> u16 {
+    if cache.contains_key(wire) {
+        return cache[wire];
     }
-    let mut resolve = |rov: &Expr| -> u16 {
-        match rov {
-            Expr::Register(name) => eval_register(&name, ops, cache),
+    let mut resolve = |expr: &Expr| -> u16 {
+        match expr {
+            Expr::Wire(name) => eval_wire(&name, gates, cache),
             Expr::Value(value) => *value,
         }
     };
-    let result = match &ops[register] {
-        Operation::Set(value) => resolve(value),
-        Operation::BinaryAnd(left, right) => resolve(left) & resolve(right),
-        Operation::BinaryOr(left, right) => resolve(left) | resolve(right),
-        Operation::BinaryNot(value) => !resolve(value),
-        Operation::LeftShift(value, amount) => resolve(value) << resolve(amount),
-        Operation::RightShift(value, amount) => resolve(value) >> resolve(amount),
+    let result = match &gates[wire] {
+        Gate::Set(value) => resolve(value),
+        Gate::BinaryAnd(left, right) => resolve(left) & resolve(right),
+        Gate::BinaryOr(left, right) => resolve(left) | resolve(right),
+        Gate::BinaryNot(value) => !resolve(value),
+        Gate::LeftShift(value, amount) => resolve(value) << resolve(amount),
+        Gate::RightShift(value, amount) => resolve(value) >> resolve(amount),
     };
-    cache.insert(register.into(), result);
+    cache.insert(wire.into(), result);
     result
 }
 
-fn parse_ops(input: &str) -> HashMap<String, Operation> {
-    let mut ops: HashMap<String, Operation> = HashMap::new();
+fn parse_gates(input: &str) -> HashMap<String, Gate> {
+    let mut gates: HashMap<String, Gate> = HashMap::new();
     for line in input.lines() {
-        let (_, (op, key)) = parse_op(line).unwrap();
-        ops.insert(key, op);
+        let (_, (gate, key)) = parse_gate(line).unwrap();
+        gates.insert(key, gate);
     }
-    ops
-}
-
-/// Part 1
-#[aoc(day7, part1)]
-pub fn part1(input: &str) -> u16 {
-    let ops = parse_ops(input);
-    let mut cache = HashMap::new();
-    eval_register("a", &ops, &mut cache)
-}
-
-/// Part 2
-#[aoc(day7, part2)]
-pub fn part2(input: &str) -> u16 {
-    let mut ops = parse_ops(input);
-    let a = eval_register("a", &ops, &mut HashMap::new());
-    ops.insert("b".into(), Operation::Set(Expr::Value(a)));
-    eval_register("a", &ops, &mut HashMap::new())
+    gates
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_parse_pov() {
-        assert_eq!(
-            parse_expr("foo!").unwrap(),
-            ("!", Expr::Register("foo".into()))
-        );
-        assert_eq!(parse_expr("123!").unwrap(), ("!", Expr::Value(123)));
-    }
 
     #[test]
     fn part1_example() {
@@ -214,16 +205,22 @@ x LSHIFT 2 -> f
 y RSHIFT 2 -> g
 NOT x -> h
 NOT y -> i";
-        let ops = parse_ops(input);
+        let gates = parse_gates(input);
         let mut cache = HashMap::new();
         // After it is run, these are the signals on the wires:
-        assert_eq!(eval_register("d", &ops, &mut cache), 72);
-        assert_eq!(eval_register("e", &ops, &mut cache), 507);
-        assert_eq!(eval_register("f", &ops, &mut cache), 492);
-        assert_eq!(eval_register("g", &ops, &mut cache), 114);
-        assert_eq!(eval_register("h", &ops, &mut cache), 65412);
-        assert_eq!(eval_register("i", &ops, &mut cache), 65079);
-        assert_eq!(eval_register("x", &ops, &mut cache), 123);
-        assert_eq!(eval_register("y", &ops, &mut cache), 456);
+        assert_eq!(eval_wire("d", &gates, &mut cache), 72);
+        assert_eq!(eval_wire("e", &gates, &mut cache), 507);
+        assert_eq!(eval_wire("f", &gates, &mut cache), 492);
+        assert_eq!(eval_wire("g", &gates, &mut cache), 114);
+        assert_eq!(eval_wire("h", &gates, &mut cache), 65412);
+        assert_eq!(eval_wire("i", &gates, &mut cache), 65079);
+        assert_eq!(eval_wire("x", &gates, &mut cache), 123);
+        assert_eq!(eval_wire("y", &gates, &mut cache), 456);
+    }
+
+    #[test]
+    fn test_parse_expr() {
+        assert_eq!(parse_expr("foo!").unwrap(), ("!", Expr::Wire("foo".into())));
+        assert_eq!(parse_expr("123!").unwrap(), ("!", Expr::Value(123)));
     }
 }
