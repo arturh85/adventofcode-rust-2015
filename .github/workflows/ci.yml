@@ -1,0 +1,26 @@
+name: "ci"
+on:
+  push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 checkout code
+        uses: actions/checkout@v2
+      - name: ⚡ install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v1
+#      - name: ⚡ install webkit2gtk (ubuntu only)
+#        if: matrix.platform == 'ubuntu-latest'
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y webkit2gtk-4.0 libgtksourceview-3.0-dev
+      - name: ✅ run rust tests
+        run: cargo test
+      - name: ✅ run rust lint
+        continue-on-error: true
+        run: cargo clippy
