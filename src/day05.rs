@@ -73,6 +73,7 @@ fn has_three_vowels(s: &str) -> bool {
         .count()
         >= 3
 }
+
 fn has_invalid(s: &str) -> bool {
     s.contains("ab") || s.contains("cd") || s.contains("pq") || s.contains("xy")
 }
@@ -158,8 +159,6 @@ mod tests {
 
     #[test]
     fn test_emojis() {
-        // `qjhvhtzxzqqjkmpb` is nice because is has a pair that appears twice (`qj`) and a letter
-        // that repeats with exactly one letter between them (`zxz`).
         assert_eq!(has_double_letter("🐂🐂"), true);
     }
 }
