@@ -25,7 +25,7 @@ jobs:
       - name: ✅ run rust doc
         run: cargo doc
       - name: 🚚 move docs to gh-pages
-        run: cp -r target/doc/adventofcode-rust-2015/ public/
+        run: cp -r target/doc/adventofcode_rust_2015/ public/
       - name: ✅ run rust lint
         continue-on-error: true
         run: cargo clippy
