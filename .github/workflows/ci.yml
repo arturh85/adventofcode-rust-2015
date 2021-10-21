@@ -16,7 +16,7 @@ jobs:
       - name: 🗃️ cache Rust
         uses: Swatinem/rust-cache@v1
       - name: ⚡ install cargo aoc
-        run: cargo install https://github.com/arturh85/cargo-aoc/tree/v0.3
+        run: cargo install --git https://github.com/arturh85/cargo-aoc --branch v0.3
       - name: ✅ run rust tests
         run: cargo test
       - name: ✅ run rust doc
