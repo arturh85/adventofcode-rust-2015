@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sh -c 'echo 0 >/proc/sys/kernel/perf_event_paranoid'
+sudo sh -c 'echo 0 >/proc/sys/kernel/perf_event_paranoid'
 for (( i = 1; i <= 24; i++ )); do
   echo "Day $i"
   cargo aoc -d $i >> timings.txt
