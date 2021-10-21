@@ -27,9 +27,9 @@ jobs:
         continue-on-error: true
         run: cargo clippy
       - name: 🚚 move docs to public
-        run: cp -r target/doc/ public/; bash run.sh; mv timings.txt public/; mv flamegraph*.svg public/;
+        run: cp -r target/doc/ public/;
       - name: ✅ run all problems, record timings & move timings.txt to public
-        run: bash run.sh; mv timings.txt public/
+        run: bash run.sh; mv timings.txt public/; mv flamegraph*.svg public/;
       - name: 📦 deploy public to gh-pages
         uses: peaceiris/actions-gh-pages@364c31d33bb99327c77b3a5438a83a357a6729ad # v3.4.0
         with:
