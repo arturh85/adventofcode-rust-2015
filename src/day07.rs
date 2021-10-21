@@ -70,7 +70,7 @@
 
 /// Part 1
 #[aoc(day7, part1)]
-pub fn part1(input: &str) -> u16 {
+fn part1(input: &str) -> u16 {
     let gates = parse_gates(input);
     let mut cache = HashMap::new();
     eval_wire("a", &gates, &mut cache)
@@ -78,7 +78,7 @@ pub fn part1(input: &str) -> u16 {
 
 /// Part 2
 #[aoc(day7, part2)]
-pub fn part2(input: &str) -> u16 {
+fn part2(input: &str) -> u16 {
     let mut gates = parse_gates(input);
     let a = eval_wire("a", &gates, &mut HashMap::new());
     gates.insert("b".into(), Gate::Set(Expr::Value(a)));

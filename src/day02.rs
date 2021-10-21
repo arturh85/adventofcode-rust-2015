@@ -68,7 +68,7 @@ fn parse_input_day2(input: &str) -> Result<Vec<Present>, std::num::ParseIntError
 
 /// Part 1
 #[aoc(day2, part1)]
-pub fn part1(presents: &[Present]) -> u32 {
+fn part1(presents: &[Present]) -> u32 {
     presents
         .iter()
         .map(|present| present.paper_required())
@@ -77,14 +77,14 @@ pub fn part1(presents: &[Present]) -> u32 {
 
 /// Part 2
 #[aoc(day2, part2)]
-pub fn part2(presents: &[Present]) -> u32 {
+fn part2(presents: &[Present]) -> u32 {
     presents
         .iter()
         .map(|present| present.ribbon_required())
         .sum()
 }
 
-pub struct Present {
+struct Present {
     l: u32,
     w: u32,
     h: u32,

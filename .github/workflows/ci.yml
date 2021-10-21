@@ -16,7 +16,7 @@ jobs:
       - name: 🗃️ cache Rust
         uses: Swatinem/rust-cache@v1
       - name: ⚡ install cargo aoc
-        run: cargo install cargo-aoc
+        run: cargo install https://github.com/arturh85/cargo-aoc/tree/v0.3
       - name: ✅ run rust tests
         run: cargo test
       - name: ✅ run rust doc
@@ -25,7 +25,7 @@ jobs:
         continue-on-error: true
         run: cargo clippy
       - name: 🚚 move docs to public
-        run: cp -r target/doc/ public/; bash run.sh; mv timings.txt public/
+        run: cp -r target/doc/ public/; bash run.sh; mv timings.txt public/; mv flamegraph*.svg public/;
       - name: ✅ run all problems, record timings & move timings.txt to public
         run: bash run.sh; mv timings.txt public/
       - name: 📦 deploy public to gh-pages

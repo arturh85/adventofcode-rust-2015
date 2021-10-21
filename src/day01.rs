@@ -47,7 +47,7 @@
 
 /// Part 1, procedural style
 #[aoc(day1, part1)]
-pub fn part1(input: &str) -> i32 {
+fn part1(input: &str) -> i32 {
     let mut sum: i32 = 0;
     for char in input.chars() {
         match char {
@@ -61,7 +61,7 @@ pub fn part1(input: &str) -> i32 {
 
 /// Part 1, functional style
 #[aoc(day1, part1, alt1)]
-pub fn part1_alt1(input: &str) -> i32 {
+fn part1_alt1(input: &str) -> i32 {
     input
         .chars()
         .map(|char| match char {
@@ -74,7 +74,7 @@ pub fn part1_alt1(input: &str) -> i32 {
 
 /// Part 2
 #[aoc(day1, part2)]
-pub fn part2(input: &str) -> Option<usize> {
+fn part2(input: &str) -> Option<usize> {
     let mut sum: i32 = 0;
     for (idx, char) in input.chars().enumerate() {
         match char {

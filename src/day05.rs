@@ -49,13 +49,13 @@
 
 /// Part 1
 #[aoc(day5, part1)]
-pub fn part1(input: &str) -> usize {
+fn part1(input: &str) -> usize {
     input.lines().filter(|line| is_nice1(line)).count()
 }
 
 /// Part 2
 #[aoc(day5, part2)]
-pub fn part2(input: &str) -> usize {
+fn part2(input: &str) -> usize {
     input.lines().filter(|line| is_nice2(line)).count()
 }
 

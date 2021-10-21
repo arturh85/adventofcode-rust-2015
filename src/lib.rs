@@ -1,4 +1,4 @@
-//! AdventOfCode Solutions in Rust for 2015
+//! # Advent of Code 2015 Solutions in Rust
 //!
 //! [`AOC 2015`]: https://adventofcode.com/2015
 

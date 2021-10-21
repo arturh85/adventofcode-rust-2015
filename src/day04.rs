@@ -26,7 +26,7 @@ use crypto::digest::Digest;
 
 /// increments a counter starting at 0 which is appended to `input` until `test` returns
 /// true for the md5 hash buffer, then returns the counter
-pub fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
+fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
     let mut hasher = crypto::md5::Md5::new();
     let mut output = [0; 16]; // An MD5 is 16 bytes
     for i in 0..u64::MAX {
@@ -43,7 +43,7 @@ pub fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u
 
 /// Part 1
 #[aoc(day4, part1)]
-pub fn part1(input: &str) -> u64 {
+fn part1(input: &str) -> u64 {
     md5_suffix_increment_until(input, |output| {
         let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
         first_five == 0
@@ -52,7 +52,7 @@ pub fn part1(input: &str) -> u64 {
 
 /// Part 2
 #[aoc(day4, part2)]
-pub fn part2(input: &str) -> u64 {
+fn part2(input: &str) -> u64 {
     md5_suffix_increment_until(input, |output| {
         let first_six = output[0] as i32 + output[1] as i32 + output[2] as i32;
         first_six == 0

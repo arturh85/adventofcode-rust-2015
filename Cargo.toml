@@ -7,7 +7,8 @@ edition = "2018"
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
 
+anyhow = "*"
 itertools = "*" # day 03
 rust-crypto = "*" # day 04
 unicode-segmentation = "*" # day 05
-nom = "*" # day 07
+nom = "*" # day 07, 08

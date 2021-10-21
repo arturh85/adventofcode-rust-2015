@@ -44,13 +44,13 @@ use std::collections::HashMap;
 
 /// Part 1
 #[aoc(day3, part1)]
-pub fn part1(input: &str) -> usize {
+fn part1(input: &str) -> usize {
     steps(input).len()
 }
 
 /// Part 2
 #[aoc(day3, part2)]
-pub fn part2(input: &str) -> usize {
+fn part2(input: &str) -> usize {
     split_merge_steps(input)
 }
 

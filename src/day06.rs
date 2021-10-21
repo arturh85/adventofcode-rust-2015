@@ -52,13 +52,13 @@ use std::ops::Add;
 
 /// Part 1
 #[aoc(day6, part1)]
-pub fn part1(input: &str) -> usize {
+fn part1(input: &str) -> usize {
     count(input, turn_on1, turn_off1, toggle1)
 }
 
 /// Part 2
 #[aoc(day6, part2)]
-pub fn part2(input: &str) -> usize {
+fn part2(input: &str) -> usize {
     count(input, turn_on2, turn_off2, toggle2)
 }
 
