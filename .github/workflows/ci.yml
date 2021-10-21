@@ -15,6 +15,8 @@ jobs:
           toolchain: stable
       - name: 🗃️ cache Rust
         uses: Swatinem/rust-cache@v1
+      - name: ⚡ install cargo flamegraph
+        run: cargo install flamegraph
       - name: ⚡ install cargo aoc
         run: cargo install --git https://github.com/arturh85/cargo-aoc --branch v0.3
       - name: ✅ run rust tests
