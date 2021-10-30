@@ -18,7 +18,7 @@ Should be compatible with Windows, Linux and macOS.
 
 Install cargo-aoc with:
 ```bash
-cargo install cargo-aoc
+cargo install cargo-aoc 
 ```
 
 ## 👷 Installation

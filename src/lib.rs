@@ -1,7 +1,7 @@
 //! # Advent of Code 2015 Solutions in Rust
 //!
-//! - [Repository](https://github.com/arturh85/adventofcode-rust-2015)
-//! - [Advent of Code Website](https://adventofcode.com/2015)
+//! - ❔ [About Advent of Code](https://adventofcode.com/about)
+//! - 📆 [List of Problems](https://adventofcode.com/2015)
 
 #[macro_use]
 extern crate aoc_runner_derive;
