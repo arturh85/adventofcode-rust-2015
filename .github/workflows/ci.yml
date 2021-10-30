@@ -37,10 +37,10 @@ jobs:
         with:
           input_dir: markdown
           output_dir: public/times/
-          image_import: ./public
+          images_dir: markdown
           build_html: true
       - name: 🚚 move times.md to public
-        run: mv markdown/times.md public/times.md
+        run: mv markdown/times.md public/times.md; cp public/flamegraph*.svg public/times/
       - name: 📦 deploy public to gh-pages
         uses: peaceiris/actions-gh-pages@364c31d33bb99327c77b3a5438a83a357a6729ad # v3.4.0
         with:
