@@ -7,7 +7,7 @@ function aoc () {
   cargo aoc -d $1 -p $2 | grep -v "AOC 2015" | sed "s/Day $1 - Part $2/### Result/g" | sed 's/,/ /g' | sed 's/generator/'"\\${nl}"'- generator/g' | sed 's/runner/'"\\${nl}"'- runner/g' > times-$1-$2.md
   if test -s times-$1-$2.md; then
     if "$2" == "1"; then
-      echo "## 📅 Day $1" >> times.md
+      echo "# 📅 Day $1" >> times.md
       echo "- [Problem](https://adventofcode.com/2015/day/$1)" >> times.md
       echo "- [Solution](https://github.com/arturh85/adventofcode-rust-2015/blob/master/src/day$1.rs)" >> times.md
     fi
@@ -16,9 +16,9 @@ function aoc () {
     echo "Generating flamegraph for Day $1 Part $2"
     time timeout -k 6m 5m cargo aoc flamegraph -d $1 -p $2 > /dev/null 2>&1
     if test -f "target/aoc/aoc-autobench/flamegraph.svg"; then
-      mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph$1-$2.svg"
-      echo "### [Flamegraph](flamegraph$1-$2.svg):" >> times.md
-      echo "![Flamegraph Day $1 Part $2](./flamegraph$1-$2.svg)" >> times.md
+      mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph-day$1-$2.svg"
+      echo "### [Flamegraph](flamegraph-day$1-$2.svg):" >> times.md
+      echo "![Flamegraph Day $1 Part $2](./flamegraph-day$1-$2.svg)" >> times.md
     fi
   fi
 }
