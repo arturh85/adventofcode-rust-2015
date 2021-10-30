@@ -28,8 +28,10 @@ jobs:
         run: cargo clippy
       - name: 🚚 move docs to public
         run: cp -r target/doc/ public/;
-      - name: ✅ run all problems, record timings & move times.md to markdown input_dir
-        run: bash .github/run.sh; mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mv flamegraph*.svg public/;
+      - name: 🚀 execute all problems & record execution times in times.md
+        run: bash .github/run.sh
+      - name: 🚚 move times.md to markdown input_dir & move generated flamegraphs to public folder
+        run: mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mv flamegraph*.svg public/;
       - name: ⚡ build markdown html
         uses: baileyjm02/markdown-to-pdf@v1
         with:
@@ -37,6 +39,8 @@ jobs:
           output_dir: public/times/
           image_import: ./public
           build_html: true
+      - name: 🚚 move times.md to public
+        run: mv markdown/times.md public/times.md
       - name: 📦 deploy public to gh-pages
         uses: peaceiris/actions-gh-pages@364c31d33bb99327c77b3a5438a83a357a6729ad # v3.4.0
         with:
