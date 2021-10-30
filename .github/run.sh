@@ -7,7 +7,7 @@ function aoc () {
   cargo aoc -d $1 -p $2 | grep -v "AOC 2015" | sed "s/Day $1 - Part $2/### Result/g" | sed 's/,/ /g' | sed 's/generator/'"\\${nl}"'- generator/g' | sed 's/runner/'"\\${nl}"'- runner/g' > times-$1-$2.md
   if test -s times-$1-$2.md; then
     if [ "$2" == "1" ]; then
-      echo "# 📅 Day $1" >> times.md
+      head src/day$1.rs -n 1 | sed 's/\/\/! # /# 📅 /g' >> times.md
       echo "- [Problem](https://adventofcode.com/2015/day/$1)" >> times.md
       echo "- [Solution](https://github.com/arturh85/adventofcode-rust-2015/blob/master/src/day$1.rs)" >> times.md
     fi
