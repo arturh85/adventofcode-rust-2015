@@ -8,8 +8,7 @@ function aoc () {
   if test -s times-$1-$2.md; then
     if [ "$2" == "1" ]; then
       head src/day$1.rs -n 1 | sed 's/\/\/! # /# 📅 /g' >> times.md
-      echo "- [Problem](https://adventofcode.com/2015/day/$1)" >> times.md
-      echo "- [Solution](https://github.com/arturh85/adventofcode-rust-2015/blob/master/src/day$1.rs)" >> times.md
+      echo "- [Solution Source](https://github.com/arturh85/adventofcode-rust-2015/blob/master/src/day$1.rs)" >> times.md
     fi
     echo "## Part $2" >> times.md
     cat times-$1-$2.md >> times.md
