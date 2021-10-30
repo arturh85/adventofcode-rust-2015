@@ -31,7 +31,7 @@ jobs:
       - name: 🚀 execute all problems & record execution times in times.md
         run: bash .github/run.sh
       - name: 🚚 move times.md to markdown input_dir & move generated flamegraphs to public folder
-        run: mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mv flamegraph*.svg public/;
+        run: mkdir markdown; mv times.md markdown/times.md; cp flamegraph*.svg markdown/; mkdir public/times/; mv flamegraph*.svg public/times/;
       - name: ⚡ build markdown html
         uses: baileyjm02/markdown-to-pdf@v1
         with:
