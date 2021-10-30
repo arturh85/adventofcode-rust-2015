@@ -12,7 +12,7 @@ function aoc () {
     time timeout -k 6m 5m cargo aoc flamegraph -d $1 -p $2 > /dev/null 2>&1
     if test -f "target/aoc/aoc-autobench/flamegraph.svg"; then
       mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph$1-$2.svg"
-      echo "- [Flamegraph](flamegraph$1-$2.svg)" >> times.md
+      echo "[Flamegraph](flamegraph$1-$2.svg):" >> times.md
       echo "![Flamegraph Day $1 Part $2](./flamegraph$1-$2.svg)" >> times.md
     fi
   fi
