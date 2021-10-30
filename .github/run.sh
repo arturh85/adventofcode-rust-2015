@@ -13,7 +13,7 @@ function aoc () {
 
 echo "# Github Action Execution times for Advent of Code 2015" >> times.md
 for (( i = 1; i <= 24; i++ )); do
-  echo "## 2015 Day $i"
+  echo "## 2015 Day $i" >> times.md
   aoc $i 1
   aoc $i 2
 done
