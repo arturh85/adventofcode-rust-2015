@@ -21,15 +21,16 @@ function aoc () {
     time timeout -k $KILL_TIMEOUT $TERM_TIMEOUT cargo aoc flamegraph -d "$1" -p "$2" > /dev/null 2>&1
     if test -f "target/aoc/aoc-autobench/flamegraph.svg"; then
       mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph-day$1-$2.svg"
-      echo "### [Flamegraph](flamegraph-day$1-$2.svg):" >> times.md
-      echo "![Flamegraph Day $1 Part $2](./flamegraph-day$1-$2.svg)" >> times.md
+      echo "### [Flame Graph](flamegraph-day$1-$2.svg):" >> times.md
+      echo "![Flame Graph Day $1 Part $2](./flamegraph-day$1-$2.svg)" >> times.md
     else
-      echo "- 🤯 Flamegraph failed to generate" >> times.md
+      echo "- 🤯 Flame Graph failed to generate" >> times.md
     fi
   fi
 }
 
 echo "# Execution times for Advent of Code $AOC_YEAR" > times.md
+echo "- 🎅 Solutions by [Artur Hallmann](https://github.com/arturh85)" >> times.md
 echo "- 🔖 [Github Repository](https://github.com/arturh85/adventofcode-rust-$AOC_YEAR)" >> times.md
 echo "- 🚀 Benchmarked using [Github Actions](https://github.com/features/actions)" >> times.md
 for (( i = 1; i <= 24; i++ )); do
