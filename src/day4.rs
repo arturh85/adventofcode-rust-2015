@@ -20,6 +20,7 @@
 //!     looks like `000006136ef...`
 //!
 //! # Part Two
+//!
 //! Now find one that starts with **six zeroes**.
 
 use crypto::digest::Digest;
@@ -41,7 +42,8 @@ fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
     0
 }
 
-/// Part 1
+/// lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
+/// start with at least five zeroes
 #[aoc(day4, part1)]
 fn part1(input: &str) -> u64 {
     md5_suffix_increment_until(input, |output| {
@@ -50,7 +52,8 @@ fn part1(input: &str) -> u64 {
     })
 }
 
-/// Part 2
+/// lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
+/// start with at least **six** zeroes
 #[aoc(day4, part2)]
 fn part2(input: &str) -> u64 {
     md5_suffix_increment_until(input, |output| {

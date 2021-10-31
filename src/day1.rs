@@ -32,6 +32,7 @@
 //! **To what floor do the instructions take Santa?**
 //!
 //! # Part Two
+//!
 //! Now, given the same instructions, find the position of the first character that
 //! causes him to enter the basement (floor  `-1`). The first character in the
 //! instructions has position  `1`, the second character has
@@ -45,7 +46,7 @@
 //! **What is the position of the character that causes Santa to first
 //! enter the basement?**
 
-/// Part 1, procedural style
+/// To what floor do the instructions take Santa? procedural style
 #[aoc(day1, part1)]
 fn part1(input: &str) -> i32 {
     let mut sum: i32 = 0;
@@ -59,7 +60,7 @@ fn part1(input: &str) -> i32 {
     sum
 }
 
-/// Part 1, functional style
+/// To what floor do the instructions take Santa? functional style
 #[aoc(day1, part1, alt1)]
 fn part1_alt1(input: &str) -> i32 {
     input
@@ -72,7 +73,7 @@ fn part1_alt1(input: &str) -> i32 {
         .sum()
 }
 
-/// Part 2
+/// What is the position of the character that causes Santa to first enter the basement?
 #[aoc(day1, part2)]
 fn part2(input: &str) -> Option<usize> {
     let mut sum: i32 = 0;

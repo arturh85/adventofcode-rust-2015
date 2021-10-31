@@ -50,13 +50,13 @@ use std::ops::Add;
 // Solution Source: https://www.reddit.com/r/adventofcode/comments/3vmltn/day_6_solutions/cxptu4a/
 // TODO: rewrite using nom?
 
-/// Part 1
+/// After following the instructions, how many lights are lit?
 #[aoc(day6, part1)]
 fn part1(input: &str) -> usize {
     count(input, turn_on1, turn_off1, toggle1)
 }
 
-/// Part 2
+/// What is the total brightness of all lights combined after following Santa's instructions?
 #[aoc(day6, part2)]
 fn part2(input: &str) -> usize {
     count(input, turn_on2, turn_off2, toggle2)

@@ -56,12 +56,9 @@
 //! is `42 - 23 = 19`.
 
 use nom::branch::alt;
-use nom::bytes::complete::{is_not, tag};
-use nom::character::complete::hex_digit1;
-use nom::combinator::value;
-use nom::InputTake;
 
-/// Part 1
+/// what is the number of characters of code for string literals minus the number of characters in
+/// memory for the values of the strings in total for the entire file?
 #[aoc(day8, part1)]
 fn part1(input: &str) -> usize {
     let mut total_string = 0;
@@ -76,7 +73,8 @@ fn part1(input: &str) -> usize {
     total_string - total_code
 }
 
-/// Part 2
+/// find the total number of characters to represent the newly encoded strings
+/// minus the number of characters of code in each original string literal
 #[aoc(day8, part2)]
 fn part2(input: &str) -> usize {
     let mut total_encoded = 0;
@@ -92,11 +90,11 @@ fn part2(input: &str) -> usize {
     total_encoded - total_code
 }
 
-fn hex_to_char(s: &str) -> Result<char, std::num::ParseIntError> {
+fn _hex_to_char(s: &str) -> Result<char, std::num::ParseIntError> {
     u8::from_str_radix(s, 16).map(|n| n as char)
 }
 
-fn parse_hex(i: &str) -> nom::IResult<&str, String, ()> {
+fn _parse_hex(i: &str) -> nom::IResult<&str, String, ()> {
     Ok((
         "",
         String::from(u8::from_str_radix(i, 16).map(|n| n as char).unwrap()),

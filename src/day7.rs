@@ -63,12 +63,13 @@
 //! **what signal is ultimately provided to wire `a`?**
 //!
 //! # Part Two
+//!
 //! Now, take the signal you got on wire a, override wire b to that signal, and reset the other wires
 //! (including wire a).
 //!
 //! **What new signal is ultimately provided to wire a?**
 
-/// Part 1
+/// what signal is ultimately provided to wire `a`?
 #[aoc(day7, part1)]
 fn part1(input: &str) -> u16 {
     let gates = parse_gates(input);
@@ -76,7 +77,7 @@ fn part1(input: &str) -> u16 {
     eval_wire("a", &gates, &mut cache)
 }
 
-/// Part 2
+/// What new signal is ultimately provided to wire a?
 #[aoc(day7, part2)]
 fn part2(input: &str) -> u16 {
     let mut gates = parse_gates(input);

@@ -47,13 +47,13 @@
 //!
 //! **How many strings are nice under these new rules?**
 
-/// Part 1
+/// How many strings are nice?
 #[aoc(day5, part1)]
 fn part1(input: &str) -> usize {
     input.lines().filter(|line| is_nice1(line)).count()
 }
 
-/// Part 2
+/// How many strings are nice under these new rules?
 #[aoc(day5, part2)]
 fn part2(input: &str) -> usize {
     input.lines().filter(|line| is_nice2(line)).count()

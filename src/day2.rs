@@ -66,7 +66,8 @@ fn parse_input_day2(input: &str) -> Result<Vec<Present>, std::num::ParseIntError
         .collect()
 }
 
-/// Part 1
+/// All numbers in the elves' list are in feet. How many total square feet of wrapping paper
+/// should they order?
 #[aoc(day2, part1)]
 fn part1(presents: &[Present]) -> u32 {
     presents
@@ -75,7 +76,7 @@ fn part1(presents: &[Present]) -> u32 {
         .sum()
 }
 
-/// Part 2
+/// How many total feet of ribbon should they order?
 #[aoc(day2, part2)]
 fn part2(presents: &[Present]) -> u32 {
     presents

@@ -20,7 +20,8 @@
 //!     house at his starting/ending location.
 //! -   `^v^v^v^v^v` delivers a bunch of presents to some very lucky children at
 //!     only `2` houses.
-//! --- Part Two ---
+//!
+//! # Part Two
 //!
 //! The next year, to speed up the process, Santa creates a robot version of himself,
 //! Robo-Santa, to deliver presents with him.
@@ -42,13 +43,13 @@
 use itertools::Itertools;
 use std::collections::HashMap;
 
-/// Part 1
+/// How many houses receive at least one present?
 #[aoc(day3, part1)]
 fn part1(input: &str) -> usize {
     steps(input).len()
 }
 
-/// Part 2
+/// This year, how many houses receive at least one present?
 #[aoc(day3, part2)]
 fn part2(input: &str) -> usize {
     split_merge_steps(input)
