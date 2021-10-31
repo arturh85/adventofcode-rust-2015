@@ -77,10 +77,20 @@ fn part1(input: &str) -> usize {
 }
 
 /// Part 2
-// #[aoc(day8, part2)]
-// fn part2(input: &str) -> usize {
-//     todo!();
-// }
+#[aoc(day8, part2)]
+fn part2(input: &str) -> usize {
+    let mut total_encoded = 0;
+    let mut total_code = 0;
+
+    for line in input.lines() {
+        let encoded = encode(line);
+        let (string, _) = count(line);
+        total_encoded += encoded.len();
+        total_code += string;
+    }
+
+    total_encoded - total_code
+}
 
 fn hex_to_char(s: &str) -> Result<char, std::num::ParseIntError> {
     u8::from_str_radix(s, 16).map(|n| n as char)
@@ -120,7 +130,10 @@ fn count(input: &str) -> (usize, usize) {
 }
 
 fn encode(i: &str) -> String {
-    todo!()
+    let mut s = i.to_string();
+    s = s.replace("\\", "\\\\");
+    s = "\"".to_string() + &*s.replace("\"", "\\\"") + "\"";
+    s
 }
 
 #[cfg(test)]
@@ -147,19 +160,16 @@ mod tests {
     #[test]
     fn part2_examples() {
         // `""` encodes to `"\"\""`, an increase from `2` characters to `6`.
-        assert_eq!(encode("\"\""), "\"\\\"\\\"\"".into());
+        assert_eq!(encode("\"\""), "\"\\\"\\\"\"");
         assert_eq!(encode("\"\"").len(), 6);
         // `"abc"` encodes to `"\"abc\""`, an increase from `5` characters to `9`.
-        // assert_eq!(encode("\"abc\""), "\"\\\"abc\\\"\"".into());
-        // assert_eq!(encode("\"abc\"").len(), 9);
+        assert_eq!(encode("\"abc\""), "\"\\\"abc\\\"\"");
+        assert_eq!(encode("\"abc\"").len(), 9);
         // // `"aaa\"aaa"` encodes to `"\"aaa\\\"aaa\""`, an increase from `10` characters to `16`.
-        // assert_eq!(
-        //     encode("\"aaa\\\"aaa\""),
-        //     "\"\\\"aaa\\\\\\\"aaa\\\"\"".into()
-        // );
-        // assert_eq!(encode("\"aaa\\\"aaa\"").len(), 16);
+        assert_eq!(encode("\"aaa\\\"aaa\""), "\"\\\"aaa\\\\\\\"aaa\\\"\"");
+        assert_eq!(encode("\"aaa\\\"aaa\"").len(), 16);
         // // `"\x27"` encodes to `"\"\\x27\""`, an increase from `6` characters to `11`.
-        // assert_eq!(encode("\"\\x27\""), "\"\\\"\\\\x27\\\"\"".into());
-        // assert_eq!(encode("\"\\x27\"").len(), 11);
+        assert_eq!(encode("\"\\x27\""), "\"\\\"\\\\x27\\\"\"");
+        assert_eq!(encode("\"\\x27\"").len(), 11);
     }
 }
