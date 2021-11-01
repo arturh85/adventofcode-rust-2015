@@ -10,6 +10,7 @@ debug = true
 aoc-runner = "0.3.0"
 aoc-runner-derive = "0.3.0"
 
+serde_json = "*"
 anyhow = "*"
 itertools = "*" # day 03
 rust-crypto = "*" # day 04
