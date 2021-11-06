@@ -48,7 +48,7 @@ use itertools::Itertools;
 use std::collections::HashMap;
 
 #[aoc_generator(day9)]
-fn parse_input_day9(input: &str) -> anyhow::Result<HashMap<String, HashMap<String, u64>>> {
+fn parse_input(input: &str) -> anyhow::Result<HashMap<String, HashMap<String, u64>>> {
     parse_routes(input)
 }
 

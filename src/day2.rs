@@ -46,7 +46,7 @@
 //! **How many total feet of ribbon should they order?**
 
 #[aoc_generator(day2)]
-fn parse_input_day2(input: &str) -> Result<Vec<Present>, std::num::ParseIntError> {
+fn parse_input(input: &str) -> Result<Vec<Present>, std::num::ParseIntError> {
     input
         .lines()
         .map(|l| {

@@ -11,10 +11,10 @@
 //!
 //! For example:
 //!
-//! -   `[1,2,3]` and `{"a":2,"b":4}` both have a sum of `6`.
-//! -   `[[[3]]]` and `{"a":{"b":4},"c":-1}` both have a sum of `3`.
-//! -   `{"a":[-1,1]}` and `[-1,{"a":1}]` both have a sum of `0`.
-//! -   `[]` and `{}` both have a sum of `0`.
+//! - `[1,2,3]` and `{"a":2,"b":4}` both have a sum of `6`.
+//! - `[[[3]]]` and `{"a":{"b":4},"c":-1}` both have a sum of `3`.
+//! - `{"a":[-1,1]}` and `[-1,{"a":1}]` both have a sum of `0`.
+//! - `[]` and `{}` both have a sum of `0`.
 //!
 //! You will not encounter any strings containing numbers.
 //!
@@ -27,15 +27,15 @@
 //! **Ignore any object (and all of its children) which has any property with the value `"red"`.
 //! Do this only for objects (`{...}`), not arrays (`[...]`).**
 //!
-//! -   `[1,2,3]` still has a sum of `6`.
-//! -   `[1,{"c":"red","b":2},3]` now has a sum of `4`, because the middle object is ignored.
-//! -   `{"d":"red","e":[1,2,3,4],"f":5}` now has a sum of `0`, because the entire structure is ignored.
-//! -   `[1,"red",5]` has a sum of `6`, because `"red"` in an array has no effect.
+//! - `[1,2,3]` still has a sum of `6`.
+//! - `[1,{"c":"red","b":2},3]` now has a sum of `4`, because the middle object is ignored.
+//! - `{"d":"red","e":[1,2,3,4],"f":5}` now has a sum of `0`, because the entire structure is ignored.
+//! - `[1,"red",5]` has a sum of `6`, because `"red"` in an array has no effect.
 
 use serde_json::Value;
 
 #[aoc_generator(day12)]
-fn parse_input_day9(input: &str) -> anyhow::Result<Value> {
+fn parse_input(input: &str) -> anyhow::Result<Value> {
     Ok(serde_json::from_str(input)?)
 }
 
@@ -53,6 +53,7 @@ fn count(value: &Value) -> i64 {
         _ => 0,
     }
 }
+
 fn count_no_red(value: &Value) -> i64 {
     match value {
         Value::Number(n) => n.as_i64().unwrap(),
@@ -74,7 +75,7 @@ fn count_no_red(value: &Value) -> i64 {
 }
 
 /// Ignore any object (and all of its children) which has any property with the value `"red"`.
-/// Do this only for objects (`{...}`), not arrays (`[...]`).**
+/// Do this only for objects (`{...}`), not arrays (`[...]`).
 #[aoc(day12, part2)]
 fn part2(input: &Value) -> i64 {
     count_no_red(input)
