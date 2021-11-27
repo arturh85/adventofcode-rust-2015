@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 AOC_YEAR=2015
-TERM_TIMEOUT=5m
-KILL_TIMEOUT=6m
+TERM_TIMEOUT=3m
+KILL_TIMEOUT=4m
 
 sudo sh -c 'echo -1 >/proc/sys/kernel/perf_event_paranoid'
 
@@ -24,7 +24,7 @@ function aoc () {
       echo "### [Flame Graph](flamegraph-day$1-$2.svg):" >> times.md
       echo "![Flame Graph Day $1 Part $2](./flamegraph-day$1-$2.svg)" >> times.md
     else
-      echo "- 🤯 Flame Graph failed to generate" >> times.md
+      echo "- 🤯 Flame Graph generation took longer than three minutes." >> times.md
     fi
   fi
 }
