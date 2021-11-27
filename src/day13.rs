@@ -65,12 +65,6 @@
 use itertools::Itertools;
 use std::collections::HashMap;
 
-struct TableRule {
-    left: String,
-    right: String,
-    delta: i64,
-}
-
 type Rules = HashMap<String, HashMap<String, i64>>;
 
 struct TableRuleset {
@@ -84,11 +78,12 @@ fn parse_input(input: &str) -> anyhow::Result<TableRuleset> {
     let mut rules: Rules = HashMap::new();
 
     for line in input.lines() {
-        let parts: Vec<&str> = line.split(' ').to_vec();
+        let parts: Vec<&str> = line.split(' ').collect();
         // Alice would gain 54 happiness units by sitting next to Bob.
         // 0     1     2    3  4         5     6  7       8    9  10
         let left = parts[0].to_string();
-        let right = parts[10].to_string();
+        let mut right = parts[10].to_string();
+        right = right[0..right.len() - 1].to_string(); // remove last char
         let mut delta: i64 = parts[3].parse()?;
         if parts[2] == "lose" {
             delta *= -1;
@@ -103,11 +98,7 @@ fn parse_input(input: &str) -> anyhow::Result<TableRuleset> {
         if !rules.contains_key(&left) {
             rules.insert(left.clone(), HashMap::new());
         }
-        if !rules.contains_key(&right) {
-            rules.insert(left.clone(), HashMap::new());
-        }
         rules.get_mut(&left).unwrap().insert(right.clone(), delta);
-        rules.get_mut(&right).unwrap().insert(left.clone(), delta);
     }
 
     Ok(TableRuleset { names, rules })
@@ -116,10 +107,39 @@ fn parse_input(input: &str) -> anyhow::Result<TableRuleset> {
 /// What is the total change in happiness for the optimal seating arrangement of the
 /// actual guest list?
 #[aoc(day13, part1)]
-fn part1(input: &TableRuleset) -> usize {
-    let mut best = i64::MIN;
-    for perm in input.names.iter().permutations(input.names.len()) {}
-    0
+fn part1(input: &TableRuleset) -> i64 {
+    input.best_happiness()
+}
+
+#[aoc(day13, part2)]
+fn part2(input: &TableRuleset) -> i64 {
+    add_yourself(input).best_happiness()
+}
+
+impl TableRuleset {
+    fn best_happiness(&self) -> i64 {
+        let mut best = i64::MIN;
+        for perm in self.names.iter().permutations(self.names.len()) {
+            let happiness = calc_happiness(&perm, &self.rules);
+            if happiness > best {
+                best = happiness;
+            }
+        }
+        best
+    }
+}
+
+fn add_yourself(rules: &TableRuleset) -> TableRuleset {
+    let mut names = rules.names.clone();
+    let mut rules = rules.rules.clone();
+    names.push("me".into());
+    rules.insert("me".into(), HashMap::new());
+
+    TableRuleset { names, rules }
+}
+
+fn get_delta(rules: &Rules, left: &str, right: &str) -> i64 {
+    *rules.get(left).unwrap().get(right).unwrap_or(&0)
 }
 
 fn calc_happiness(seating: &Vec<&String>, rules: &Rules) -> i64 {
@@ -127,85 +147,15 @@ fn calc_happiness(seating: &Vec<&String>, rules: &Rules) -> i64 {
     for name in seating {
         by_name.insert((*name).clone(), 0);
     }
-
     for pair in seating.windows(2) {
-        by_name[pair[0]] += rules.get(pair[0]).unwrap().get(pair[1]).unwrap();
-        by_name[pair[1]] += rules.get(pair[1]).unwrap().get(pair[1]).unwrap();
+        *by_name.get_mut(pair[0]).unwrap() += get_delta(rules, pair[0], pair[1]);
+        *by_name.get_mut(pair[1]).unwrap() += get_delta(rules, pair[1], pair[0]);
     }
-
-    // table2 = vcat(table[2:end], table[1])
-    //
-    // for (a,b) in zip(table, table2) {
-    //     for change in filter(r -> r.personA == a && r.personB == b, rules) {
-    //         by_name[a] += change.value
-    //     }
-    //     for change in filter(r -> r.personA == b && r.personB == a, rules) {
-    //         by_name[b] += change.value
-    //     }
-    // }
-
-    // sum(values(by_name))
-    todo!();
+    let last_idx = seating.len() - 1;
+    *by_name.get_mut(seating[0]).unwrap() += get_delta(rules, seating[0], seating[last_idx]);
+    *by_name.get_mut(seating[last_idx]).unwrap() += get_delta(rules, seating[last_idx], seating[0]);
+    by_name.values().sum()
 }
-
-/// What is the total change in happiness for the optimal seating arrangement that actually
-/// includes yourself?
-// #[aoc(day12, part2)]
-// fn part2(input: &str) -> usize {
-//     todo!();
-// }
-
-// calc_happiness(["Alice", "Bob", "Carol", "David"], map(parseline, split(example_input, "\n")))
-
-/*
-
-fn parseline(line) {
-    m = match(r"(\w+) would (\w+) (\d+) happiness units by sitting next to (\w+)", line)
-    (
-        personA=m[1],
-        value=m[2] == "gain" ? parse(Int, m[3]) : -parse(Int, m[3]),
-        personB=m[4]
-    )
-}
-
-# map(parseline, split(example_input, "\n"))
-
-
-calc_happiness(["Alice", "Bob", "Carol", "David"], map(parseline, split(example_input, "\n")))
-
-fn mosthappy1(rules) {
-    people = collect(Set(map(rule -> rule.personA, rules)))
-
-    maxhappiness = 0
-    for perm in permutations(people) {
-        maxhappiness = max(maxhappiness, calc_happiness(perm, rules))
-    }
-    maxhappiness
-}
-
-@assert mosthappy1(map(parseline, split(example_input, "\n"))) == 330
-
-part1 = mosthappy1(map(parseline, split(puzzle_input, "\n")))
-
-
-fn mosthappy2(rules) {
-    people = collect(Set(map(rule -> rule.personA, rules)))
-    me_rules = copy(rules)
-
-    for person in people {
-        push!(rules, (personA="me", value=0, personB=person))
-        push!(rules, (personA=person, value=0, personB="me"))
-    }
-
-    push!(people, "me")
-    maxhappiness = 0
-    for perm in permutations(people) {
-        maxhappiness = max(maxhappiness, calc_happiness(perm, rules))
-    }
-    maxhappiness
-}
-
-*/
 
 #[cfg(test)]
 mod tests {
@@ -213,7 +163,8 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        let input = "Alice would gain 54 happiness units by sitting next to Bob.
+        let rules = parse_input(
+            "Alice would gain 54 happiness units by sitting next to Bob.
 Alice would lose 79 happiness units by sitting next to Carol.
 Alice would lose 2 happiness units by sitting next to David.
 Bob would gain 83 happiness units by sitting next to Alice.
@@ -224,9 +175,9 @@ Carol would gain 60 happiness units by sitting next to Bob.
 Carol would gain 55 happiness units by sitting next to David.
 David would gain 46 happiness units by sitting next to Alice.
 David would lose 7 happiness units by sitting next to Bob.
-David would gain 41 happiness units by sitting next to Carol.";
+David would gain 41 happiness units by sitting next to Carol.",
+        )
+        .expect("failed to parse");
+        assert_eq!(330, rules.best_happiness());
     }
-
-    #[test]
-    fn part2_examples() {}
 }
