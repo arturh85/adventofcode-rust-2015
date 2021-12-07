@@ -29,7 +29,6 @@
 //! **What is the length of the new result?**
 
 use itertools::Itertools;
-use nom::Parser;
 
 /// Part 1: Starting with the digits in your puzzle input, apply this process 40 times.
 /// What is the length of the result?

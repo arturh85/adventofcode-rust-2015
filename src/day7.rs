@@ -69,7 +69,7 @@
 //!
 //! **What new signal is ultimately provided to wire a?**
 
-#[aoc_generator(day15)]
+#[aoc_generator(day7)]
 fn parse_input(input: &str) -> HashMap<String, Gate> {
     let mut gates = HashMap::new();
     for line in input.lines() {
@@ -89,21 +89,23 @@ fn part1(input: &HashMap<String, Gate>) -> u16 {
 /// Part 2: What new signal is ultimately provided to wire a?
 #[aoc(day7, part2)]
 fn part2(input: &HashMap<String, Gate>) -> u16 {
+    let mut input = input.clone();
     let a = eval_wire("a", &input, &mut HashMap::new());
-    gates.insert("b".into(), Gate::Set(Expr::Value(a)));
-    eval_wire("a", &gates, &mut HashMap::new())
+    input.insert("b".into(), Gate::Set(Expr::Value(a)));
+    eval_wire("a", &input, &mut HashMap::new())
 }
 
 use nom::bytes::complete::tag;
 use nom::character::complete::{alpha1, digit1};
 use std::collections::HashMap;
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 enum Expr {
     Wire(String),
     Value(u16),
 }
 
+#[derive(Clone)]
 enum Gate {
     Set(Expr),
     BinaryNot(Expr),

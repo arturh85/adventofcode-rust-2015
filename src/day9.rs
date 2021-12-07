@@ -57,7 +57,7 @@ fn parse_input(input: &str) -> anyhow::Result<HashMap<String, HashMap<String, u6
         if let Some(matches) = re.captures(line) {
             let source = matches.name("source").unwrap().as_str();
             let target = matches.name("target").unwrap().as_str();
-            let mut distance = matches.name("distance").unwrap().as_str().parse()?;
+            let distance = matches.name("distance").unwrap().as_str().parse()?;
             if !routes.contains_key(source) {
                 routes.insert(source.to_string(), HashMap::new());
             }
@@ -127,7 +127,7 @@ Dublin to Belfast = 141";
     fn part1_examples() {
         // The shortest of these is `London -> Dublin -> Belfast = 605`, and so
         // the answer is `605` in this example.
-        assert_eq!(605, part1(&routes), parse_input(EXAMPLE).unwrap());
+        assert_eq!(605, part1(&parse_input(EXAMPLE).unwrap()));
     }
 
     #[test]
