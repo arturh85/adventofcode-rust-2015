@@ -69,19 +69,27 @@
 //!
 //! **What new signal is ultimately provided to wire a?**
 
-/// what signal is ultimately provided to wire `a`?
-#[aoc(day7, part1)]
-fn part1(input: &str) -> u16 {
-    let gates = parse_gates(input);
-    let mut cache = HashMap::new();
-    eval_wire("a", &gates, &mut cache)
+#[aoc_generator(day15)]
+fn parse_input(input: &str) -> HashMap<String, Gate> {
+    let mut gates = HashMap::new();
+    for line in input.lines() {
+        let (_, (gate, key)) = parse_gate(line).unwrap();
+        gates.insert(key, gate);
+    }
+    gates
 }
 
-/// What new signal is ultimately provided to wire a?
+/// Part 1: what signal is ultimately provided to wire `a`?
+#[aoc(day7, part1)]
+fn part1(input: &HashMap<String, Gate>) -> u16 {
+    let mut cache = HashMap::new();
+    eval_wire("a", &input, &mut cache)
+}
+
+/// Part 2: What new signal is ultimately provided to wire a?
 #[aoc(day7, part2)]
-fn part2(input: &str) -> u16 {
-    let mut gates = parse_gates(input);
-    let a = eval_wire("a", &gates, &mut HashMap::new());
+fn part2(input: &HashMap<String, Gate>) -> u16 {
+    let a = eval_wire("a", &input, &mut HashMap::new());
     gates.insert("b".into(), Gate::Set(Expr::Value(a)));
     eval_wire("a", &gates, &mut HashMap::new())
 }
@@ -182,15 +190,6 @@ fn eval_wire(wire: &str, gates: &HashMap<String, Gate>, cache: &mut HashMap<Stri
     result
 }
 
-fn parse_gates(input: &str) -> HashMap<String, Gate> {
-    let mut gates: HashMap<String, Gate> = HashMap::new();
-    for line in input.lines() {
-        let (_, (gate, key)) = parse_gate(line).unwrap();
-        gates.insert(key, gate);
-    }
-    gates
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -198,15 +197,16 @@ mod tests {
     #[test]
     fn part1_example() {
         // For example, here is a simple circuit:
-        let input = "123 -> x
+        let gates = parse_input(
+            "123 -> x
 456 -> y
 x AND y -> d
 x OR y -> e
 x LSHIFT 2 -> f
 y RSHIFT 2 -> g
 NOT x -> h
-NOT y -> i";
-        let gates = parse_gates(input);
+NOT y -> i",
+        );
         let mut cache = HashMap::new();
         // After it is run, these are the signals on the wires:
         assert_eq!(eval_wire("d", &gates, &mut cache), 72);

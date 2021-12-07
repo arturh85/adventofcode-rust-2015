@@ -39,10 +39,17 @@ fn parse_input(input: &str) -> anyhow::Result<Value> {
     Ok(serde_json::from_str(input)?)
 }
 
-/// What is the sum of all numbers in the document?
+/// Part 1: What is the sum of all numbers in the document?
 #[aoc(day12, part1)]
 fn part1(input: &Value) -> i64 {
     count(input)
+}
+
+/// Part 2: Ignore any object (and all of its children) which has any property with the value `"red"`.
+/// Do this only for objects (`{...}`), not arrays (`[...]`).
+#[aoc(day12, part2)]
+fn part2(input: &Value) -> i64 {
+    count_no_red(input)
 }
 
 fn count(value: &Value) -> i64 {
@@ -72,13 +79,6 @@ fn count_no_red(value: &Value) -> i64 {
         }
         _ => 0,
     }
-}
-
-/// Ignore any object (and all of its children) which has any property with the value `"red"`.
-/// Do this only for objects (`{...}`), not arrays (`[...]`).
-#[aoc(day12, part2)]
-fn part2(input: &Value) -> i64 {
-    count_no_red(input)
 }
 
 #[cfg(test)]

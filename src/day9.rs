@@ -45,16 +45,43 @@
 //! **What is the distance of the longest route?**
 
 use itertools::Itertools;
+use regex::Regex;
 use std::collections::HashMap;
 
 #[aoc_generator(day9)]
 fn parse_input(input: &str) -> anyhow::Result<HashMap<String, HashMap<String, u64>>> {
-    parse_routes(input)
+    let mut routes = HashMap::new();
+    // London to Dublin = 464
+    let re = Regex::new(r"^(?P<source>\w+) to (?P<target>\w+) = (?P<distance>\d+)$")?;
+    for line in input.lines() {
+        if let Some(matches) = re.captures(line) {
+            let source = matches.name("source").unwrap().as_str();
+            let target = matches.name("target").unwrap().as_str();
+            let mut distance = matches.name("distance").unwrap().as_str().parse()?;
+            if !routes.contains_key(source) {
+                routes.insert(source.to_string(), HashMap::new());
+            }
+            if !routes.contains_key(target) {
+                routes.insert(target.to_string(), HashMap::new());
+            }
+            routes
+                .get_mut(source)
+                .unwrap()
+                .insert(target.to_string(), distance);
+            routes
+                .get_mut(target)
+                .unwrap()
+                .insert(source.to_string(), distance);
+        } else {
+            panic!("failed to parse: {}", line)
+        }
+    }
+    Ok(routes)
 }
 
 type RoutingMap = HashMap<String, HashMap<String, u64>>;
 
-/// What is the distance of the shortest route?
+/// Part 1: What is the distance of the shortest route?
 #[aoc(day9, part1)]
 fn part1(routes: &RoutingMap) -> u64 {
     *lengths(routes)
@@ -63,7 +90,7 @@ fn part1(routes: &RoutingMap) -> u64 {
         .expect("routes should not be empty")
 }
 
-/// What is the distance of the longest route?
+/// Part 2: What is the distance of the longest route?
 #[aoc(day9, part2)]
 fn part2(routes: &RoutingMap) -> u64 {
     *lengths(routes)
@@ -88,65 +115,25 @@ fn lengths(routes: &RoutingMap) -> Vec<u64> {
         .collect()
 }
 
-fn parse_routes(input: &str) -> anyhow::Result<RoutingMap> {
-    let mut routes = HashMap::new();
-    for line in input.lines() {
-        let vec: Vec<&str> = line.split(" ").collect();
-        if vec.len() != 5 {
-            return Err(anyhow!("invalid format, expected 4 words per line"));
-        }
-        // London to Dublin = 464
-        // 0      1  2      3 4
-        let source = vec[0];
-        let target = vec[2];
-        let distance = vec[4];
-        if !routes.contains_key(source) {
-            routes.insert(source.to_string(), HashMap::new());
-        }
-        if !routes.contains_key(target) {
-            routes.insert(target.to_string(), HashMap::new());
-        }
-        routes
-            .get_mut(source)
-            .unwrap()
-            .insert(target.to_string(), distance.parse().unwrap());
-        routes
-            .get_mut(target)
-            .unwrap()
-            .insert(source.to_string(), distance.parse().unwrap());
-    }
-    Ok(routes)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    const EXAMPLE: &str = "London to Dublin = 464
+London to Belfast = 518
+Dublin to Belfast = 141";
+
     #[test]
     fn part1_examples() {
-        let routes = parse_routes(
-            "London to Dublin = 464
-London to Belfast = 518
-Dublin to Belfast = 141",
-        )
-        .expect("failed to parse example");
-
         // The shortest of these is `London -> Dublin -> Belfast = 605`, and so
         // the answer is `605` in this example.
-        assert_eq!(part1(&routes), 605);
+        assert_eq!(605, part1(&routes), parse_input(EXAMPLE).unwrap());
     }
 
     #[test]
     fn part2_examples() {
-        let routes = parse_routes(
-            "London to Dublin = 464
-London to Belfast = 518
-Dublin to Belfast = 141",
-        )
-        .expect("failed to parse example");
-
         // For example, given the distances above, the longest route would be `982`
         // via (for example) `Dublin -> London -> Belfast`.
-        assert_eq!(part2(&routes), 982);
+        assert_eq!(982, part2(&parse_input(EXAMPLE).unwrap()));
     }
 }

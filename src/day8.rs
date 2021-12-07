@@ -57,7 +57,7 @@
 
 use nom::branch::alt;
 
-/// what is the number of characters of code for string literals minus the number of characters in
+/// Part 1: what is the number of characters of code for string literals minus the number of characters in
 /// memory for the values of the strings in total for the entire file?
 #[aoc(day8, part1)]
 fn part1(input: &str) -> usize {
@@ -73,7 +73,7 @@ fn part1(input: &str) -> usize {
     total_string - total_code
 }
 
-/// find the total number of characters to represent the newly encoded strings
+/// Part 2: find the total number of characters to represent the newly encoded strings
 /// minus the number of characters of code in each original string literal
 #[aoc(day8, part2)]
 fn part2(input: &str) -> usize {

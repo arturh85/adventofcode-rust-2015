@@ -22,8 +22,8 @@
 //! at `1120` km (poor Dancer has only gotten `1056` km by that point). So, in this situation,
 //! Comet would win (if the race ended at 1000 seconds).
 //!
-//! Given the descriptions of each reindeer (in your puzzle input), after exactly `2503` seconds,
-//! what distance has the winning reindeer traveled?
+//! **Given the descriptions of each reindeer (in your puzzle input), after exactly `2503` seconds,
+//! what distance has the winning reindeer traveled?**
 //!
 //! # Part Two
 //!
@@ -43,50 +43,56 @@
 //! champion, only has `312`. So, with the new scoring system, Dancer would win (if the race ended
 //! at 1000 seconds).
 //!
-//! Again given the descriptions of each reindeer (in your puzzle input), after exactly `2503`
-//! seconds, how many points does the winning reindeer have?
+//! **Again given the descriptions of each reindeer (in your puzzle input), after exactly `2503`
+//! seconds, how many points does the winning reindeer have?**
 
+use regex::Regex;
 use std::collections::HashMap;
+
+#[aoc_generator(day14)]
+fn parse_input(input: &str) -> anyhow::Result<Vec<Reindeer>> {
+    let mut reindeers: Vec<Reindeer> = Vec::new();
+    // Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
+    let re = Regex::new(
+        r"^(?P<name>\w+) can fly (?P<speed>\d+) km/s for (?P<run_duration>\d+) seconds, but then must rest for (?P<rest_duration>\d+) seconds.$",
+    )?;
+    for line in input.lines() {
+        if let Some(matches) = re.captures(line) {
+            let name = matches.name("name").unwrap().as_str().to_string();
+            let speed = matches.name("speed").unwrap().as_str().parse()?;
+            let run_duration = matches.name("run_duration").unwrap().as_str().parse()?;
+            let rest_duration = matches.name("rest_duration").unwrap().as_str().parse()?;
+            reindeers.push(Reindeer {
+                name,
+                speed,
+                run_duration,
+                rest_duration,
+            })
+        } else {
+            panic!("failed to parse: {}", line)
+        }
+    }
+
+    Ok(reindeers)
+}
+
+/// Part 1: After exactly `2503` seconds, what distance has the winning reindeer traveled?
+#[aoc(day14, part1)]
+fn part1(input: &Vec<Reindeer>) -> u64 {
+    best_distance_after(input, 2503)
+}
+
+/// Part 2: After exactly `2503` seconds, how many points does the winning reindeer have?
+#[aoc(day14, part2)]
+fn part2(input: &Vec<Reindeer>) -> u64 {
+    best_points_after(input, 2503)
+}
 
 struct Reindeer {
     name: String,
     speed: u64,
     run_duration: u64,
     rest_duration: u64,
-}
-
-#[aoc_generator(day14)]
-fn parse_input(input: &str) -> anyhow::Result<Vec<Reindeer>> {
-    let mut reindeers: Vec<Reindeer> = Vec::new();
-    for line in input.lines() {
-        let parts: Vec<&str> = line.split(' ').collect();
-        // Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
-        // 0     1   2   3  4    5   6  7        8   9    10   11   12  13  14
-        let name = parts[0].to_string();
-        let speed = parts[3].parse()?;
-        let run_duration = parts[6].parse()?;
-        let rest_duration = parts[13].parse()?;
-        reindeers.push(Reindeer {
-            name,
-            speed,
-            run_duration,
-            rest_duration,
-        })
-    }
-
-    Ok(reindeers)
-}
-
-/// After exactly `2503` seconds, what distance has the winning reindeer traveled?
-#[aoc(day14, part1)]
-fn part1(input: &Vec<Reindeer>) -> u64 {
-    best_distance_after(input, 2503)
-}
-
-/// After exactly `2503` seconds, how many points does the winning reindeer have?
-#[aoc(day14, part2)]
-fn part2(input: &Vec<Reindeer>) -> u64 {
-    best_points_after(input, 2503)
 }
 
 impl Reindeer {
@@ -128,23 +134,19 @@ fn best_points_after(reindeers: &Vec<Reindeer>, time: u64) -> u64 {
 mod tests {
     use super::*;
 
+    const EXAMPLE: &str =
+        "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
+Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.";
+
     #[test]
     fn part1_examples() {
-        let reindeers = parse_input(
-            "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
-Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
-        )
-        .expect("failed to parse");
+        let reindeers = parse_input(EXAMPLE).expect("failed to parse");
         assert_eq!(1120, best_distance_after(&reindeers, 1000));
     }
 
     #[test]
     fn part2_examples() {
-        let reindeers = parse_input(
-            "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
-Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.",
-        )
-        .expect("failed to parse");
+        let reindeers = parse_input(EXAMPLE).expect("failed to parse");
         assert_eq!(689, best_points_after(&reindeers, 1000));
     }
 }

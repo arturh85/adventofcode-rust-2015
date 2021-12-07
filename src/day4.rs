@@ -25,6 +25,26 @@
 
 use crypto::digest::Digest;
 
+/// Part 1: lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
+/// start with at least five zeroes
+#[aoc(day4, part1)]
+fn part1(input: &str) -> u64 {
+    md5_suffix_increment_until(input, |output| {
+        let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
+        first_five == 0
+    })
+}
+
+/// Part 2: lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
+/// start with at least **six** zeroes
+#[aoc(day4, part2)]
+fn part2(input: &str) -> u64 {
+    md5_suffix_increment_until(input, |output| {
+        let first_six = output[0] as i32 + output[1] as i32 + output[2] as i32;
+        first_six == 0
+    })
+}
+
 /// increments a counter starting at 0 which is appended to `input` until `test` returns
 /// true for the md5 hash buffer, then returns the counter
 fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
@@ -40,26 +60,6 @@ fn md5_suffix_increment_until(input: &str, test: fn(&[u8; 16]) -> bool) -> u64 {
         hasher.reset();
     }
     0
-}
-
-/// lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
-/// start with at least five zeroes
-#[aoc(day4, part1)]
-fn part1(input: &str) -> u64 {
-    md5_suffix_increment_until(input, |output| {
-        let first_five = output[0] as i32 + output[1] as i32 + (output[2] >> 4) as i32;
-        first_five == 0
-    })
-}
-
-/// lowest positive number (no leading zeroes: `1`, `2`, `3`, ...) that produces a hash which
-/// start with at least **six** zeroes
-#[aoc(day4, part2)]
-fn part2(input: &str) -> u64 {
-    md5_suffix_increment_until(input, |output| {
-        let first_six = output[0] as i32 + output[1] as i32 + output[2] as i32;
-        first_six == 0
-    })
 }
 
 #[cfg(test)]

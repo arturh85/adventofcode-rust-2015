@@ -43,13 +43,13 @@
 use itertools::Itertools;
 use std::collections::HashMap;
 
-/// How many houses receive at least one present?
+/// Part 1: How many houses receive at least one present?
 #[aoc(day3, part1)]
 fn part1(input: &str) -> usize {
     steps(input).len()
 }
 
-/// This year, how many houses receive at least one present?
+/// Part 2: This year, how many houses receive at least one present?
 #[aoc(day3, part2)]
 fn part2(input: &str) -> usize {
     split_merge_steps(input)

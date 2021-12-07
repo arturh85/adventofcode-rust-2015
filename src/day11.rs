@@ -39,13 +39,13 @@
 //!
 //! **Santa's password expired again. What's the next one?**
 
-/// Given Santa's current password (your puzzle input), what should his next password be?
+/// Part 1: Given Santa's current password (your puzzle input), what should his next password be?
 #[aoc(day11, part1)]
 fn part1(input: &str) -> String {
     next_valid(input)
 }
 
-/// Santa's password expired again. What's the next one?
+/// Part 2: Santa's password expired again. What's the next one?
 #[aoc(day11, part2)]
 fn part2(input: &str) -> String {
     let next = next_valid(input);

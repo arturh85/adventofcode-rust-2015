@@ -29,8 +29,9 @@
 //! **What is the length of the new result?**
 
 use itertools::Itertools;
+use nom::Parser;
 
-/// Starting with the digits in your puzzle input, apply this process 40 times.
+/// Part 1: Starting with the digits in your puzzle input, apply this process 40 times.
 /// What is the length of the result?
 #[aoc(day10, part1)]
 fn part1(input: &str) -> usize {
@@ -41,7 +42,7 @@ fn part1(input: &str) -> usize {
     s.len()
 }
 
-/// Now, starting again with the digits in your puzzle input, apply this process 50 times.
+/// Part 2: Now, starting again with the digits in your puzzle input, apply this process 50 times.
 /// What is the length of the new result?
 #[aoc(day10, part2)]
 fn part2(input: &str) -> usize {

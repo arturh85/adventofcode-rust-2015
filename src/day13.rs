@@ -63,57 +63,64 @@
 //! includes yourself?**
 
 use itertools::Itertools;
+use regex::Regex;
 use std::collections::HashMap;
-
-type Rules = HashMap<String, HashMap<String, i64>>;
-
-struct TableRuleset {
-    rules: Rules,
-    names: Vec<String>,
-}
 
 #[aoc_generator(day13)]
 fn parse_input(input: &str) -> anyhow::Result<TableRuleset> {
     let mut names: Vec<String> = Vec::new();
     let mut rules: Rules = HashMap::new();
-
+    // Alice would gain 54 happiness units by sitting next to Bob.
+    let re = Regex::new(
+        r"^(?P<left>\w+) would (?P<delta_type>gain|lose) (?P<delta>\d+) happiness units by sitting next to (?P<right>\w+).$",
+    )?;
     for line in input.lines() {
-        let parts: Vec<&str> = line.split(' ').collect();
-        // Alice would gain 54 happiness units by sitting next to Bob.
-        // 0     1     2    3  4         5     6  7       8    9  10
-        let left = parts[0].to_string();
-        let mut right = parts[10].to_string();
-        right = right[0..right.len() - 1].to_string(); // remove last char
-        let mut delta: i64 = parts[3].parse()?;
-        if parts[2] == "lose" {
-            delta *= -1;
-        }
-        if !names.contains(&left) {
-            names.push(left.clone());
-        }
-        if !names.contains(&right) {
-            names.push(right.clone());
-        }
+        if let Some(matches) = re.captures(line) {
+            let left = matches.name("left").unwrap().as_str().to_string();
+            let right = matches.name("right").unwrap().as_str().to_string();
+            let delta_type = matches.name("delta_type").unwrap().as_str();
+            let mut delta = matches.name("delta").unwrap().as_str().parse()?;
+            if delta_type == "lose" {
+                delta *= -1;
+            }
+            if !names.contains(&left) {
+                names.push(left.clone());
+            }
+            if !names.contains(&right) {
+                names.push(right.clone());
+            }
 
-        if !rules.contains_key(&left) {
-            rules.insert(left.clone(), HashMap::new());
+            if !rules.contains_key(&left) {
+                rules.insert(left.clone(), HashMap::new());
+            }
+            rules.get_mut(&left).unwrap().insert(right.clone(), delta);
+        } else {
+            panic!("failed to parse: {}", line)
         }
-        rules.get_mut(&left).unwrap().insert(right.clone(), delta);
     }
 
     Ok(TableRuleset { names, rules })
 }
 
-/// What is the total change in happiness for the optimal seating arrangement of the
+/// Part 1: What is the total change in happiness for the optimal seating arrangement of the
 /// actual guest list?
 #[aoc(day13, part1)]
 fn part1(input: &TableRuleset) -> i64 {
     input.best_happiness()
 }
 
+/// Part 2: What is the total change in happiness for the optimal seating arrangement that actually
+/// includes yourself?
 #[aoc(day13, part2)]
 fn part2(input: &TableRuleset) -> i64 {
     add_yourself(input).best_happiness()
+}
+
+type Rules = HashMap<String, HashMap<String, i64>>;
+
+struct TableRuleset {
+    rules: Rules,
+    names: Vec<String>,
 }
 
 impl TableRuleset {
@@ -161,10 +168,7 @@ fn calc_happiness(seating: &Vec<&String>, rules: &Rules) -> i64 {
 mod tests {
     use super::*;
 
-    #[test]
-    fn part1_examples() {
-        let rules = parse_input(
-            "Alice would gain 54 happiness units by sitting next to Bob.
+    const EXAMPLE: &str = "Alice would gain 54 happiness units by sitting next to Bob.
 Alice would lose 79 happiness units by sitting next to Carol.
 Alice would lose 2 happiness units by sitting next to David.
 Bob would gain 83 happiness units by sitting next to Alice.
@@ -175,9 +179,11 @@ Carol would gain 60 happiness units by sitting next to Bob.
 Carol would gain 55 happiness units by sitting next to David.
 David would gain 46 happiness units by sitting next to Alice.
 David would lose 7 happiness units by sitting next to Bob.
-David would gain 41 happiness units by sitting next to Carol.",
-        )
-        .expect("failed to parse");
+David would gain 41 happiness units by sitting next to Carol.";
+
+    #[test]
+    fn part1_examples() {
+        let rules = parse_input(EXAMPLE).expect("failed to parse");
         assert_eq!(330, rules.best_happiness());
     }
 }
