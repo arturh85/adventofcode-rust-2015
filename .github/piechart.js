@@ -101,6 +101,7 @@ const colors = [
 let day = -1;
 let part = -1;
 let time_in_micro_seconds = -1;
+let total_time_in_micro_seconds = 0;
 
 const lines = buffer.split(/\r?\n/);
 
@@ -115,6 +116,7 @@ for (line of lines) {
         }
         day = matches[1];
         part = matches[2];
+        total_time_in_micro_seconds += time_in_micro_seconds;
         time_in_micro_seconds = 0;
     }
     const matches2 = line.match(regex2);
@@ -137,6 +139,14 @@ for (line of lines) {
     }
 }
 
+if (day !== -1) {
+    chart.data.labels.push(`Day ${day}.${part}`)
+    chart.data.datasets[0].backgroundColor.push(colors[colorIdx++])
+    chart.data.datasets[0].data.push(time_in_micro_seconds)
+    total_time_in_micro_seconds += time_in_micro_seconds;
+}
+
 console.log('updated pie chart url')
+lines[4] = '## Distribution of ' + (total_time_in_micro_seconds / 1000000.0).toFixed(2) + " seconds";
 lines[5] = '![Pie Chart](' + prefix + encodeURIComponent(JSON.stringify(chart)) + ')';
 fs.writeFileSync("times.md", lines.join('\n'));
