@@ -129,8 +129,8 @@ fn count(input: &str) -> (usize, usize) {
 
 fn encode(i: &str) -> String {
     let mut s = i.to_string();
-    s = s.replace("\\", "\\\\");
-    s = "\"".to_string() + &*s.replace("\"", "\\\"") + "\"";
+    s = s.replace('\\', "\\\\");
+    s = "\"".to_string() + &*s.replace('\"', "\\\"") + "\"";
     s
 }
 

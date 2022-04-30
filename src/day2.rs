@@ -55,7 +55,7 @@ fn parse_input(input: &str) -> Result<Vec<Present>, std::num::ParseIntError> {
                 .map(|f| f.parse::<u32>())
                 .collect::<Result<Vec<u32>, std::num::ParseIntError>>()
                 .map(|mut p| {
-                    p.sort();
+                    p.sort_unstable();
                     Present {
                         l: p[0],
                         w: p[1],

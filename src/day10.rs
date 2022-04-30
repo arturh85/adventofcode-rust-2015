@@ -65,7 +65,7 @@ fn lookandsay(input: &str) -> String {
     let mut s = String::new();
     for group in group_chars(input) {
         let count = group.len().to_string();
-        let char = group.chars().nth(0).unwrap().to_string();
+        let char = group.chars().next().unwrap().to_string();
         s += count.as_str();
         s += char.as_str();
     }

@@ -68,8 +68,8 @@ fn next_valid(s: &str) -> String {
 
 fn next(input: &str) -> String {
     let mut bytes: Vec<u8> = input.as_bytes().to_vec();
-    let first = 'a' as u8;
-    let last = 'z' as u8;
+    let first = b'a';
+    let last = b'z';
     let len = input.len();
     for idx in (0..len).rev() {
         let mut v = bytes[idx] + 1;

@@ -68,7 +68,7 @@ where
     T: Default,
     T: Copy,
 {
-    let ref mut grid = Grid {
+    let grid = &mut Grid {
         data: vec![Default::default(); 1_000_000],
     };
 

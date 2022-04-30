@@ -55,8 +55,8 @@ fn part2(input: &Value) -> i64 {
 fn count(value: &Value) -> i64 {
     match value {
         Value::Number(n) => n.as_i64().unwrap(),
-        Value::Array(arr) => arr.iter().map(|n| count(n)).sum(),
-        Value::Object(object) => object.values().map(|n| count(n)).sum(),
+        Value::Array(arr) => arr.iter().map(count).sum(),
+        Value::Object(object) => object.values().map(count).sum(),
         _ => 0,
     }
 }
@@ -64,7 +64,7 @@ fn count(value: &Value) -> i64 {
 fn count_no_red(value: &Value) -> i64 {
     match value {
         Value::Number(n) => n.as_i64().unwrap(),
-        Value::Array(arr) => arr.iter().map(|n| count_no_red(n)).sum(),
+        Value::Array(arr) => arr.iter().map(count_no_red).sum(),
         Value::Object(object) => {
             let mut sum = 0;
             for value in object.values() {

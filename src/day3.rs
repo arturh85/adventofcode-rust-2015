@@ -85,7 +85,7 @@ fn split_merge_steps(s: &str) -> usize {
     let mut even = steps(&even);
     let odd = steps(&odd);
     even.extend(odd.into_iter());
-    return even.len();
+    even.len()
 }
 
 #[cfg(test)]

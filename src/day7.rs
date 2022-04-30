@@ -83,7 +83,7 @@ fn parse_input(input: &str) -> HashMap<String, Gate> {
 #[aoc(day7, part1)]
 fn part1(input: &HashMap<String, Gate>) -> u16 {
     let mut cache = HashMap::new();
-    eval_wire("a", &input, &mut cache)
+    eval_wire("a", input, &mut cache)
 }
 
 /// Part 2: What new signal is ultimately provided to wire a?
@@ -176,7 +176,7 @@ fn eval_wire(wire: &str, gates: &HashMap<String, Gate>, cache: &mut HashMap<Stri
     }
     let mut resolve = |expr: &Expr| -> u16 {
         match expr {
-            Expr::Wire(name) => eval_wire(&name, gates, cache),
+            Expr::Wire(name) => eval_wire(name, gates, cache),
             Expr::Value(value) => *value,
         }
     };
