@@ -184,6 +184,6 @@ David would gain 41 happiness units by sitting next to Carol.";
     #[test]
     fn part1_examples() {
         let rules = parse_input(EXAMPLE).expect("failed to parse");
-        assert_eq!(330, rules.best_happiness());
+        assert_eq!(rules.best_happiness(), 330);
     }
 }

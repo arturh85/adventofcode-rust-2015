@@ -78,13 +78,13 @@ fn parse_input(input: &str) -> anyhow::Result<Vec<Reindeer>> {
 
 /// Part 1: After exactly `2503` seconds, what distance has the winning reindeer traveled?
 #[aoc(day14, part1)]
-fn part1(input: &Vec<Reindeer>) -> u64 {
+fn part1(input: &[Reindeer]) -> u64 {
     best_distance_after(input, 2503)
 }
 
 /// Part 2: After exactly `2503` seconds, how many points does the winning reindeer have?
 #[aoc(day14, part2)]
-fn part2(input: &Vec<Reindeer>) -> u64 {
+fn part2(input: &[Reindeer]) -> u64 {
     best_points_after(input, 2503)
 }
 
@@ -106,7 +106,7 @@ impl Reindeer {
     }
 }
 
-fn best_distance_after(reindeers: &Vec<Reindeer>, time: u64) -> u64 {
+fn best_distance_after(reindeers: &[Reindeer], time: u64) -> u64 {
     reindeers
         .iter()
         .map(|reindeer| reindeer.distance_after(time))
@@ -114,7 +114,7 @@ fn best_distance_after(reindeers: &Vec<Reindeer>, time: u64) -> u64 {
         .unwrap()
 }
 
-fn best_points_after(reindeers: &Vec<Reindeer>, time: u64) -> u64 {
+fn best_points_after(reindeers: &[Reindeer], time: u64) -> u64 {
     let mut points: HashMap<String, u64> = HashMap::new();
     for reindeer in reindeers {
         points.insert(reindeer.name.clone(), 0);
@@ -141,12 +141,12 @@ Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.";
     #[test]
     fn part1_examples() {
         let reindeers = parse_input(EXAMPLE).expect("failed to parse");
-        assert_eq!(1120, best_distance_after(&reindeers, 1000));
+        assert_eq!(best_distance_after(&reindeers, 1000), 1120);
     }
 
     #[test]
     fn part2_examples() {
         let reindeers = parse_input(EXAMPLE).expect("failed to parse");
-        assert_eq!(689, best_points_after(&reindeers, 1000));
+        assert_eq!(best_points_after(&reindeers, 1000), 689);
     }
 }

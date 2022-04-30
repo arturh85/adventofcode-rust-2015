@@ -127,13 +127,13 @@ Dublin to Belfast = 141";
     fn part1_examples() {
         // The shortest of these is `London -> Dublin -> Belfast = 605`, and so
         // the answer is `605` in this example.
-        assert_eq!(605, part1(&parse_input(EXAMPLE).unwrap()));
+        assert_eq!(part1(&parse_input(EXAMPLE).unwrap()), 605);
     }
 
     #[test]
     fn part2_examples() {
         // For example, given the distances above, the longest route would be `982`
         // via (for example) `Dublin -> London -> Belfast`.
-        assert_eq!(982, part2(&parse_input(EXAMPLE).unwrap()));
+        assert_eq!(part2(&parse_input(EXAMPLE).unwrap()), 982);
     }
 }
