@@ -74,7 +74,6 @@
 //! molecule in your puzzle input, what is the fewest number of steps to go from `e` to the
 //! medicine molecule?
 
-use itertools::Itertools;
 use std::collections::HashSet;
 
 type Replacements = Vec<(String, String)>;
@@ -136,21 +135,21 @@ fn variants(puzzle: &str, from: &str, to: &str) -> HashSet<String> {
 //     find_production(replacements, puzzle, 0).unwrap()
 // }
 
-fn find_production(replacements: &Replacements, input: &str, depth: usize) -> Option<usize> {
-    if input == "e" {
-        return Some(depth);
-    }
-    for next_step in replacements
-        .iter()
-        .flat_map(|&(ref from, ref to)| input.single_replacements(to, from).into_iter())
-        .unique()
-    {
-        if let Some(count) = find_production(replacements, &next_step, depth + 1) {
-            return Some(count);
-        }
-    }
-    None
-}
+// fn find_production(replacements: &Replacements, input: &str, depth: usize) -> Option<usize> {
+//     if input == "e" {
+//         return Some(depth);
+//     }
+//     for next_step in replacements
+//         .iter()
+//         .flat_map(|&(ref from, ref to)| input.single_replacements(to, from).into_iter())
+//         .unique()
+//     {
+//         if let Some(count) = find_production(replacements, &next_step, depth + 1) {
+//             return Some(count);
+//         }
+//     }
+//     None
+// }
 
 trait SingleReplacements {
     // like std::str::replace but returning a Vec<String> with one replacement in each
