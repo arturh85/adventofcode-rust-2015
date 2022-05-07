@@ -13,6 +13,7 @@ aoc-runner-derive = "0.3.0"
 anyhow = "*"
 serde_json = "*" # day 12
 regex = "*" # day 15
+petgraph = "*" # day 19
 itertools = "*" # day 03
 rust-crypto = "*" # day 04
 unicode-segmentation = "*" # day 05
