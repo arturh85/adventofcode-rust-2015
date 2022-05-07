@@ -130,11 +130,11 @@ fn variants(puzzle: &str, from: &str, to: &str) -> HashSet<String> {
 /// Part 2: How long will it take to make the medicine? Given the available replacements and the
 /// medicine molecule in your puzzle input, what is the fewest number of steps to go from `e` to
 /// the medicine molecule?
-#[aoc(day19, part2)]
-fn part2(input: &(Replacements, String)) -> usize {
-    let (replacements, puzzle) = input;
-    find_production(replacements, puzzle, 0).unwrap()
-}
+// #[aoc(day19, part2)]
+// fn part2(input: &(Replacements, String)) -> usize {
+//     let (replacements, puzzle) = input;
+//     find_production(replacements, puzzle, 0).unwrap()
+// }
 
 fn find_production(replacements: &Replacements, input: &str, depth: usize) -> Option<usize> {
     if input == "e" {
