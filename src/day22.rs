@@ -1,5 +1,4 @@
-//! Day 22: Wizard Simulator 20XX ---
-//! ---------------------------------
+//! # [Day 22: Wizard Simulator 20XX](https://adventofcode.com/2015/day/22)
 //!
 //! Little Henry Case decides that defeating bosses with
 //! [swords and stuff](https://adventofcode.com/2015/day/21) is boring. Now he's playing the game
@@ -137,6 +136,7 @@
 //! (Do not include mana RECHARGE effects as "spending" negative mana.)
 //!
 //! # Part Two
+//!
 //! On the next run through the game, you increase the difficulty to hard.
 //!
 //! At the start of each player turn (before any other effects apply), you lose 1 hit point.
@@ -188,6 +188,7 @@ fn part1(input: &Stats) -> u64 {
     *least_mana
 }
 
+#[allow(clippy::too_many_arguments)]
 fn sim(
     least_mana_used: Arc<Mutex<u64>>,
     mut boss_hitpoints: i64,
@@ -271,7 +272,7 @@ fn sim(
         player_hitpoints -= damage;
         if player_hitpoints > 0 {
             sim(
-                least_mana_used.clone(),
+                least_mana_used,
                 boss_hitpoints,
                 boss_damage,
                 player_hitpoints,

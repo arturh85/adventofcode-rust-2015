@@ -1,5 +1,4 @@
-//! Day 21: RPG Simulator 20XX ---
-//! ------------------------------
+//! # [Day 21: RPG Simulator 20XX](https://adventofcode.com/2015/day/21)
 //!
 //! Little Henry Case got a new video game for Christmas.
 //! It's an [RPG](https://en.wikipedia.org/wiki/Role-playing_video_game), and he's stuck on a boss.
@@ -131,7 +130,7 @@ fn min_shop_gold(boss: &Stats) -> u64 {
 fn ring_combos(rings: &[Item]) -> Vec<Item> {
     let mut combos = Vec::new();
     for a in rings {
-        combos.push(a.clone());
+        combos.push(*a);
         for b in rings {
             if a != b {
                 combos.push(combine(a, b));
@@ -151,7 +150,7 @@ fn armor_ring_combos(armors: &[Item], rings: &[Item]) -> Vec<Item> {
     let rings = ring_combos(rings);
     let mut combos = rings.clone();
     for armor in armors {
-        combos.push(armor.clone());
+        combos.push(*armor);
         for ring in &rings {
             combos.push(combine(armor, ring));
         }

@@ -178,11 +178,11 @@ mod tests {
 H => OH
 O => HH";
 
-    const EXAMPLE_2: &str = "e => H
-e => O
-H => HO
-H => OH
-O => HH";
+    //     const EXAMPLE_2: &str = "e => H
+    // e => O
+    // H => HO
+    // H => OH
+    // O => HH";
 
     #[test]
     fn part1_examples() {
@@ -201,12 +201,12 @@ O => HH";
         );
     }
 
-    #[test]
-    fn part2_examples() {
-        let (replacements, _) = parse_input(EXAMPLE_2);
-        // So, you could make `HOH` after `3` steps.
-        assert_eq!(3, find_production(&replacements, "HOH", 0).unwrap());
-        // Santa's favorite molecule, `HOHOHO`, can be made in `6` steps.
-        assert_eq!(6, find_production(&replacements, "HOHOHO", 0).unwrap());
-    }
+    // #[test]
+    // fn part2_examples() {
+    //     let (replacements, _) = parse_input(EXAMPLE_2);
+    //     // So, you could make `HOH` after `3` steps.
+    //     assert_eq!(3, find_production(&replacements, "HOH", 0).unwrap());
+    //     // Santa's favorite molecule, `HOHOHO`, can be made in `6` steps.
+    //     assert_eq!(6, find_production(&replacements, "HOHOHO", 0).unwrap());
+    // }
 }
