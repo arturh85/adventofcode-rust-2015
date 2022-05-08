@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["lengths",""],["parse_input",""],["part1","Part 1: What is the distance of the shortest route?"],["part2","Part 2: What is the distance of the longest route?"]],"mod":[["day9_part1",""],["day9_part2",""]],"type":[["RoutingMap",""]]});

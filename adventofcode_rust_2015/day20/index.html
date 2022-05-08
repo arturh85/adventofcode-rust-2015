@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 20: Infinite Elves and Infinite Houses"><meta name="keywords" content="rust, rustlang, rust-lang, day20"><title>adventofcode_rust_2015::day20 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day20</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day20" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day20</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day20.rs.html#1-133">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-20-infinite-elves-and-infinite-houses"><a href="#day-20-infinite-elves-and-infinite-houses">Day 20: Infinite Elves and Infinite Houses</a></h2>
+<p>To keep the Elves busy, Santa has them deliver some presents by hand, door-to-door.
+He sends them down a street with infinite houses numbered sequentially:</p>
+<p><code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code>, and so on.</p>
+<p>Each Elf is assigned a number, too, and delivers presents to houses based on that number:</p>
+<ul>
+<li>The first Elf (number <code>1</code>) delivers presents to every house:
+<code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code>, ….</li>
+<li>The second Elf (number <code>2</code>) delivers presents to every second house:
+<code>2</code>, <code>4</code>, <code>6</code>, <code>8</code>, <code>10</code>, ….</li>
+<li>Elf number <code>3</code> delivers presents to every third house:
+<code>3</code>, <code>6</code>, <code>9</code>, <code>12</code>, <code>15</code>, ….</li>
+</ul>
+<p>There are infinitely many Elves, numbered starting with <code>1</code>.
+Each Elf delivers presents equal to ten times his or her number at each house.</p>
+<p>So, the first nine houses on the street end up like this:</p>
+<div class="example-wrap"><pre class="language-plain"><code>House 1 got 10 presents.
+House 2 got 30 presents.
+House 3 got 40 presents.
+House 4 got 70 presents.
+House 5 got 60 presents.
+House 6 got 120 presents.
+House 7 got 80 presents.
+House 8 got 150 presents.
+House 9 got 130 presents.</code></pre></div>
+<p>The first house gets <code>10</code> presents: it is visited only by Elf <code>1</code>,
+which delivers <code>1 * 10 = 10</code> presents. The fourth house gets <code>70</code> presents, because it is
+visited by Elves <code>1</code>, <code>2</code>, and <code>4</code>, for a total of <code>10 + 20 + 40 = 70</code> presents.</p>
+<p><strong>What is the lowest house number of the house to get at least as many presents as the
+number in your puzzle input?</strong></p>
+<h2 id="part-2"><a href="#part-2">Part 2</a></h2>
+<p>The Elves decide they don’t want to visit an infinite number of houses. Instead,
+each Elf will stop after delivering presents to <code>50</code> houses.
+To make up for it, they decide to deliver presents equal to
+eleven times their number at each house.</p>
+<p>With these changes, <strong>what is the new lowest house number of the house to get at least as
+many presents as the number in your puzzle input?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day20_part1/index.html" title="adventofcode_rust_2015::day20::day20_part1 mod">day20_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day20_part2/index.html" title="adventofcode_rust_2015::day20::day20_part2 mod">day20_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.divisors.html" title="adventofcode_rust_2015::day20::divisors fn">divisors</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day20::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day20::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the lowest house number of the house to get at least as many presents as the
+number in your puzzle input?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day20::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: what is the new lowest house number of the house to get at least as
+many presents as the number in your puzzle input?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.presents_at1.html" title="adventofcode_rust_2015::day20::presents_at1 fn">presents_at1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.presents_at2.html" title="adventofcode_rust_2015::day20::presents_at2 fn">presents_at2</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

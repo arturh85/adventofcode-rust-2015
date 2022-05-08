@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["part1","Part 1: How many houses receive at least one present?"],["part2","Part 2: This year, how many houses receive at least one present?"],["split_merge_steps",""],["steps",""]],"mod":[["day3_part1",""],["day3_part2",""]],"type":[["Point",""]]});

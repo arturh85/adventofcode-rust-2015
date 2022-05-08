@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 15: Science for Hungry People"><meta name="keywords" content="rust, rustlang, rust-lang, day15"><title>adventofcode_rust_2015::day15 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day15</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day15" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day15</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day15.rs.html#1-226">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-15-science-for-hungry-people"><a href="#day-15-science-for-hungry-people">Day 15: Science for Hungry People</a></h2>
+<p>Today, you set out on the task of perfecting your milk-dunking cookie recipe.
+All you have to do is find the right balance of ingredients.</p>
+<p>Your recipe leaves room for exactly <code>100</code> teaspoons of ingredients. You make a list of the
+remaining ingredients you could use to finish the recipe (your puzzle input) and their
+properties per teaspoon:</p>
+<ul>
+<li><code>capacity</code> (how well it helps the cookie absorb milk)</li>
+<li><code>durability</code> (how well it keeps the cookie intact when full of milk)</li>
+<li><code>flavor</code> (how tasty it makes the cookie)</li>
+<li><code>texture</code> (how it improves the feel of the cookie)</li>
+<li><code>calories</code> (how many calories it adds to the cookie)</li>
+</ul>
+<p>You can only measure ingredients in whole-teaspoon amounts accurately, and you have to be
+accurate so you can reproduce your results in the future. The total score of a cookie can be
+found by adding up each of the properties (negative totals become <code>0</code>) and then multiplying
+together everything except calories.</p>
+<p>For instance, suppose you have these two ingredients:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8
+Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3</code></pre></div>
+<p>Then, choosing to use <code>44</code> teaspoons of butterscotch and <code>56</code> teaspoons of cinnamon (because
+the amounts of each ingredient must add up to <code>100</code>) would result in a cookie with the
+following properties:</p>
+<ul>
+<li>A <code>capacity</code> of <code>44*-1 + 56*2 = 68</code></li>
+<li>A <code>durability</code> of <code>44*-2 + 56*3 = 80</code></li>
+<li>A <code>flavor</code> of <code>44*6 + 56*-2 = 152</code></li>
+<li>A <code>texture</code> of <code>44*3 + 56*-1 = 76</code></li>
+</ul>
+<p>Multiplying these together (<code>68 * 80 * 152 * 76</code>, ignoring <code>calories</code> for now) results in a
+total score of <code>62842880</code>, which happens to be the best score possible given these ingredients.
+If any properties had produced a negative total, it would have instead become zero, causing
+the whole score to multiply to zero.</p>
+<p><strong>Given the ingredients in your kitchen and their properties, what is the total score of the
+highest-scoring cookie you can make?</strong></p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>Your cookie recipe becomes wildly popular! Someone asks if you can make another recipe that
+has exactly <code>500</code> calories per cookie (so they can use it as a meal replacement). Keep the rest
+of your award-winning process the same (100 teaspoons, same ingredients, same scoring system).</p>
+<p>For example, given the ingredients above, if you had instead selected <code>40</code> teaspoons of
+butterscotch and <code>60</code> teaspoons of cinnamon (which still adds to <code>100</code>), the total calorie
+count would be <code>40*8 + 60*3 = 500</code>. The total score would go down, though: only <code>57600000</code>,
+the best you can do in such trying circumstances.</p>
+<p><strong>Given the ingredients in your kitchen and their properties, what is the total score of the
+highest-scoring cookie you can make with a calorie total of <code>500</code>?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day15_part1/index.html" title="adventofcode_rust_2015::day15::day15_part1 mod">day15_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day15_part2/index.html" title="adventofcode_rust_2015::day15::day15_part2 mod">day15_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Ingredient.html" title="adventofcode_rust_2015::day15::Ingredient struct">Ingredient</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.best_cookie_score1.html" title="adventofcode_rust_2015::day15::best_cookie_score1 fn">best_cookie_score1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.best_cookie_score2.html" title="adventofcode_rust_2015::day15::best_cookie_score2 fn">best_cookie_score2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.cookie_calories.html" title="adventofcode_rust_2015::day15::cookie_calories fn">cookie_calories</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.cookie_score.html" title="adventofcode_rust_2015::day15::cookie_score fn">cookie_score</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day15::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day15::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: what is the total score of the highest-scoring cookie you can make?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day15::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: what is the total score of the highest-scoring cookie you can make with a calorie total of <code>500</code></p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

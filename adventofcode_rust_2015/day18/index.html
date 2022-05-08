@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 18: Like a GIF For Your Yard"><meta name="keywords" content="rust, rustlang, rust-lang, day18"><title>adventofcode_rust_2015::day18 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day18</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day18" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day18</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day18.rs.html#1-323">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-18-like-a-gif-for-your-yard"><a href="#day-18-like-a-gif-for-your-yard">Day 18: Like a GIF For Your Yard</a></h2>
+<p>After the <a href="https://adventofcode.com/2015/day/6">million lights incident</a>, the fire code has
+gotten stricter: now, at most ten thousand lights are allowed.
+You arrange them in a 100x100 grid.</p>
+<p>Never one to let you down, Santa again mails you instructions on the ideal lighting
+configuration. With so few lights, he says, you’ll have to resort to animation.</p>
+<p>Start by setting your lights to the included initial configuration (your puzzle input).
+A <code>#</code> means “on”, and a <code>.</code> means “off”.</p>
+<p>Then, animate your grid in steps, where each step decides the next configuration based on
+the current one. Each light’s next state (either on or off) depends on its current state
+and the current states of the eight lights adjacent to it (including diagonals).
+Lights on the edge of the grid might have fewer than eight neighbors;
+the missing ones always count as “off”.</p>
+<p>For example, in a simplified 6x6 grid, the light marked <code>A</code> has the neighbors numbered <code>1</code>
+through <code>8</code>, and the light marked <code>B</code>, which is on an edge, only has the neighbors marked <code>1</code>
+through <code>5</code>:</p>
+<div class="example-wrap"><pre class="language-plain"><code>1B5...
+234...
+......
+..123.
+..8A4.
+..765.
+</code></pre></div>
+<p>The state a light should have next is based on its current state (on or off) plus
+the number of neighbors that are on:</p>
+<ul>
+<li>A light which is on stays on when <code>2</code> or <code>3</code> neighbors are on, and turns off otherwise.</li>
+<li>A light which is off turns on if exactly <code>3</code> neighbors are on, and stays off otherwise.</li>
+</ul>
+<p>All of the lights update simultaneously; they all consider the same current state
+before moving to the next.</p>
+<p>Here’s a few steps from an example configuration of another 6x6 grid:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Initial state:
+.#.#.#
+...##.
+#....#
+..#...
+#.#..#
+###..
+
+After 1 step:
+..##..
+..##.#
+...##.
+......
+#.....
+#.##..
+
+After 2 steps:
+..###.
+......
+..###.
+......
+.#....
+.#....
+
+After 3 steps:
+...#..
+......
+...#..
+..##..
+......
+......
+
+After 4 steps:
+......
+......
+..##..
+..##..
+......
+......
+</code></pre></div>
+<p>After <code>4</code> steps, this example has four lights on.</p>
+<p>In your grid of 100x100 lights, given your initial configuration,
+how many lights are on after 100 steps?</p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>You flip the instructions over; Santa goes on to point out that this is all just an
+implementation of <a href="https://en.wikipedia.org/wiki/Conway&#x27;s_Game_of_Life">Conway’s Game of Life</a>.
+At least, it was, until you notice that something’s wrong with the grid of lights you bought:
+four lights, one in each corner, are stuck on and can’t be turned off.</p>
+<p>The example above will actually run like this:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Initial state:
+#.#.#
+...##.
+#....#
+..#...
+#.#..#
+###.#
+
+After 1 step:
+#.##.#
+###.#
+...##.
+......
+#...#.
+#.####
+
+After 2 steps:
+#..#.#
+#....#
+.#.##.
+...##.
+.#..##
+#.###
+
+After 3 steps:
+#...##
+###.#
+..##.#
+......
+#....
+###.#
+
+After 4 steps:
+#.####
+#....#
+...#..
+.##...
+#.....
+#.#..#
+
+After 5 steps:
+#.###
+.##..#
+.##...
+.##...
+#.#...
+#...#
+</code></pre></div>
+<p>After <code>5</code> steps, this example now has <code>17</code> lights on.</p>
+<p>In your grid of 100x100 lights, given your initial configuration, but with the four
+corners always in the on state, how many lights are on after 100 steps?</p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day18_part1/index.html" title="adventofcode_rust_2015::day18::day18_part1 mod">day18_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day18_part2/index.html" title="adventofcode_rust_2015::day18::day18_part2 mod">day18_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.count_on.html" title="adventofcode_rust_2015::day18::count_on fn">count_on</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.create_grid.html" title="adventofcode_rust_2015::day18::create_grid fn">create_grid</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.evolve1.html" title="adventofcode_rust_2015::day18::evolve1 fn">evolve1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.evolve2.html" title="adventofcode_rust_2015::day18::evolve2 fn">evolve2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.execute_step.html" title="adventofcode_rust_2015::day18::execute_step fn">execute_step</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.fill_corners.html" title="adventofcode_rust_2015::day18::fill_corners fn">fill_corners</a></div><div class="item-right docblock-short"><p>implements “Four lights, one in each corner, are stuck on and can’t be turned off.” on grid</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day18::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day18::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: In your grid of 100x100 lights, given your initial configuration,
+how many lights are on after 100 steps?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day18::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: In your grid of 100x100 lights, given your initial configuration, but with the four
+corners always in the on state, how many lights are on after 100 steps?</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

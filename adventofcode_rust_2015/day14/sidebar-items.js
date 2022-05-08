@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["best_distance_after",""],["best_points_after",""],["parse_input",""],["part1","Part 1: After exactly `2503` seconds, what distance has the winning reindeer traveled?"],["part2","Part 2: After exactly `2503` seconds, how many points does the winning reindeer have?"]],"mod":[["day14_part1",""],["day14_part2",""]],"struct":[["Reindeer",""]]});

@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 23: Opening the Turing Lock"><meta name="keywords" content="rust, rustlang, rust-lang, day23"><title>adventofcode_rust_2015::day23 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day23</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day23" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day23</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day23.rs.html#1-179">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-23-opening-the-turing-lock"><a href="#day-23-opening-the-turing-lock">Day 23: Opening the Turing Lock</a></h2>
+<p>Little Jane Marie just got her very first computer for Christmas from some unknown benefactor.
+It comes with instructions and an example program, but the computer itself seems to be
+malfunctioning. She’s curious what the program does, and would like you to help her run it.</p>
+<p>The manual explains that the computer supports two
+<a href="https://en.wikipedia.org/wiki/Processor_register">registers</a> and six
+<a href="https://en.wikipedia.org/wiki/Instruction_set">instructions</a> (truly, it goes on to remind the
+reader, a state-of-the-art technology). The registers are named <code>a</code> and <code>b</code>, can hold any
+<a href="https://en.wikipedia.org/wiki/Natural_number">non-negative integer</a>, and begin with a value of
+<code>0</code>. The instructions are as follows:</p>
+<ul>
+<li><code>hlf r</code> sets register <code>r</code> to half its current value, then continues with the next instruction.</li>
+<li><code>tpl r</code> sets register <code>r</code> to triple its current value, then continues with the next
+instruction.</li>
+<li><code>inc r</code> increments register <code>r</code>, adding <code>1</code> to it, then continues with the next instruction.</li>
+<li><code>jmp offset</code> is a jump; it continues with the instruction <code>offset</code> away relative to itself.</li>
+<li><code>jie r, offset</code> is like <code>jmp</code>, but only jumps if register <code>r</code> is even (“jump if even”).</li>
+<li><code>jio r, offset</code> is like <code>jmp</code>, but only jumps if register <code>r</code> is <code>1</code> (“jump if one”, not odd).</li>
+</ul>
+<p>All three jump instructions work with an offset relative to that instruction.
+The offset is always written with a prefix <code>+</code> or <code>-</code> to indicate the direction of the jump
+(forward or backward, respectively). For example, <code>jmp +1</code> would simply continue with the next
+instruction, while <code>jmp +0</code> would continuously jump back to itself forever.</p>
+<p>The program exits when it tries to run an instruction beyond the ones defined.</p>
+<p>For example, this program sets <code>a</code> to <code>2</code>, because the <code>jio</code> instruction causes it to
+skip the <code>tpl</code> instruction:</p>
+<div class="example-wrap"><pre class="language-plain"><code>inc a
+jio a, +2
+tpl a
+inc a</code></pre></div>
+<p><strong>What is the value in register <code>b</code> when the program in your puzzle input is finished executing?</strong></p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>The unknown benefactor is very thankful for releasi– er, helping little Jane Marie with her
+computer. Definitely not to distract you, <strong>what is the value in register b after the program is
+finished executing if register a starts as 1 instead?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day23_part1/index.html" title="adventofcode_rust_2015::day23::day23_part1 mod">day23_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day23_part2/index.html" title="adventofcode_rust_2015::day23::day23_part2 mod">day23_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Instruction.html" title="adventofcode_rust_2015::day23::Instruction enum">Instruction</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.exec.html" title="adventofcode_rust_2015::day23::exec fn">exec</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day23::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day23::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the value in register <code>b</code> when the program in your puzzle input is finished executing?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day23::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: what is the value in register b after the program is finished executing if
+register a starts as 1 instead?</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

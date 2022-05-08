@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 22: Wizard Simulator 20XX"><meta name="keywords" content="rust, rustlang, rust-lang, day22"><title>adventofcode_rust_2015::day22 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day22</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section><div id="sidebar-vars" data-name="day22" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day22</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day22.rs.html#1-307">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-22-wizard-simulator-20xx"><a href="#day-22-wizard-simulator-20xx">Day 22: Wizard Simulator 20XX</a></h2>
+<p>Little Henry Case decides that defeating bosses with
+<a href="https://adventofcode.com/2015/day/21">swords and stuff</a> is boring. Now he’s playing the game
+with a wizard. Of course, he gets stuck on another boss and needs your help again.</p>
+<p>In this version, combat still proceeds with the player and the boss taking alternating turns.
+The player still goes first. Now, however, you don’t get any equipment; instead, you must
+choose one of your SPELLS to cast. The first character at or below <code>0</code> hit points loses.</p>
+<p>Since you’re a wizard, you don’t get to wear armor, and you can’t attack normally.
+However, since you do magic damage, your opponent’s armor is ignored, and so the boss
+effectively has zero armor as well. As before, if armor (from a spell, in this case) would
+reduce damage below <code>1</code>, it becomes <code>1</code> instead - that is, the boss’ attacks always deal at
+least <code>1</code> damage.</p>
+<p>On each of your turns, you must select one of your SPELLS to cast. If you cannot afford to
+cast any spell, you lose. Spells cost mana; you start with 500 mana, but have no maximum limit.
+You must have enough mana to cast a spell, and its cost is immediately deducted when you
+cast it. Your SPELLS are Magic Missile, Drain, Shield, Poison, and Recharge.</p>
+<ul>
+<li>Magic Missile costs <code>53</code> mana. It instantly does <code>4</code> damage.</li>
+<li>Drain costs <code>73</code> mana. It instantly does <code>2</code> damage and heals you for <code>2</code> hit points.</li>
+<li>Shield costs <code>113</code> mana. It starts an effect that lasts for <code>6</code> turns.
+While it is active, your armor is increased by <code>7</code>.</li>
+<li>Poison costs <code>173</code> mana. It starts an effect that lasts for <code>6</code> turns.
+At the start of each turn while it is active, it deals the boss <code>3</code> damage.</li>
+<li>Recharge costs <code>229</code> mana. It starts an effect that lasts for <code>5</code> turns.
+At the start of each turn while it is active, it gives you <code>101</code> new mana.</li>
+</ul>
+<p>Effects all work the same way. Effects apply at the start of both the player’s turns and the
+boss’ turns. Effects are created with a timer (the number of turns they last); at the start of
+each turn, after they apply any effect they have, their timer is decreased by one. If this
+decreases the timer to zero, the effect ends. You cannot cast a spell that would start an
+effect which is already active. However, effects can be started on the same turn they end.</p>
+<p>For example, suppose the player has <code>10</code> hit points and <code>250</code> mana, and that the
+boss has <code>13</code> hit points and <code>8</code> damage:</p>
+<div class="example-wrap"><pre class="language-plain"><code>-- Player turn --
+- Player has 10 hit points, 0 armor, 250 mana
+- Boss has 13 hit points
+Player casts Poison.
+
+-- Boss turn --
+- Player has 10 hit points, 0 armor, 77 mana
+- Boss has 13 hit points
+Poison deals 3 damage; its timer is now 5.
+Boss attacks for 8 damage.
+
+-- Player turn --
+- Player has 2 hit points, 0 armor, 77 mana
+- Boss has 10 hit points
+Poison deals 3 damage; its timer is now 4.
+Player casts Magic Missile, dealing 4 damage.
+
+-- Boss turn --
+- Player has 2 hit points, 0 armor, 24 mana
+- Boss has 3 hit points
+Poison deals 3 damage. This kills the boss, and the player wins.</code></pre></div>
+<p>Now, suppose the same initial conditions, except that the boss has <code>14</code> hit points instead:</p>
+<div class="example-wrap"><pre class="language-plain"><code>-- Player turn --
+- Player has 10 hit points, 0 armor, 250 mana
+- Boss has 14 hit points
+Player casts Recharge.
+
+-- Boss turn --
+- Player has 10 hit points, 0 armor, 21 mana
+- Boss has 14 hit points
+Recharge provides 101 mana; its timer is now 4.
+Boss attacks for 8 damage!
+
+-- Player turn --
+- Player has 2 hit points, 0 armor, 122 mana
+- Boss has 14 hit points
+Recharge provides 101 mana; its timer is now 3.
+Player casts Shield, increasing armor by 7.
+
+-- Boss turn --
+- Player has 2 hit points, 7 armor, 110 mana
+- Boss has 14 hit points
+Shield&#39;s timer is now 5.
+Recharge provides 101 mana; its timer is now 2.
+Boss attacks for 8 - 7 = 1 damage!
+
+-- Player turn --
+- Player has 1 hit point, 7 armor, 211 mana
+- Boss has 14 hit points
+Shield&#39;s timer is now 4.
+Recharge provides 101 mana; its timer is now 1.
+Player casts Drain, dealing 2 damage, and healing 2 hit points.
+
+-- Boss turn --
+- Player has 3 hit points, 7 armor, 239 mana
+- Boss has 12 hit points
+Shield&#39;s timer is now 3.
+Recharge provides 101 mana; its timer is now 0.
+Recharge wears off.
+Boss attacks for 8 - 7 = 1 damage!
+
+-- Player turn --
+- Player has 2 hit points, 7 armor, 340 mana
+- Boss has 12 hit points
+Shield&#39;s timer is now 2.
+Player casts Poison.
+
+-- Boss turn --
+- Player has 2 hit points, 7 armor, 167 mana
+- Boss has 12 hit points
+Shield&#39;s timer is now 1.
+Poison deals 3 damage; its timer is now 5.
+Boss attacks for 8 - 7 = 1 damage!
+
+-- Player turn --
+- Player has 1 hit point, 7 armor, 167 mana
+- Boss has 9 hit points
+Shield&#39;s timer is now 0.
+Shield wears off, decreasing armor by 7.
+Poison deals 3 damage; its timer is now 4.
+Player casts Magic Missile, dealing 4 damage.
+
+-- Boss turn --
+- Player has 1 hit point, 0 armor, 114 mana
+- Boss has 2 hit points
+Poison deals 3 damage. This kills the boss, and the player wins.</code></pre></div>
+<p>You start with 50 hit points and 500 mana points.
+The boss’s actual stats are in your puzzle input.
+<strong>What is the least amount of mana you can spend and still win the fight?</strong>
+(Do not include mana RECHARGE effects as “spending” negative mana.)</p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>On the next run through the game, you increase the difficulty to hard.</p>
+<p>At the start of each player turn (before any other effects apply), you lose 1 hit point.
+If this brings you to or below 0 hit points, you lose.</p>
+<p>With the same starting stats for you and the boss, <strong>what is the least amount of mana you can
+spend and still win the fight?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day22_part1/index.html" title="adventofcode_rust_2015::day22::day22_part1 mod">day22_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day22_part2/index.html" title="adventofcode_rust_2015::day22::day22_part2 mod">day22_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.DRAIN.html" title="adventofcode_rust_2015::day22::DRAIN constant">DRAIN</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.MISSILE.html" title="adventofcode_rust_2015::day22::MISSILE constant">MISSILE</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.POISON.html" title="adventofcode_rust_2015::day22::POISON constant">POISON</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.RECHARGE.html" title="adventofcode_rust_2015::day22::RECHARGE constant">RECHARGE</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.SHIELD.html" title="adventofcode_rust_2015::day22::SHIELD constant">SHIELD</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.SPELLS.html" title="adventofcode_rust_2015::day22::SPELLS constant">SPELLS</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day22::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day22::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the least amount of mana you can spend and still win the fight?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day22::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: What is the least amount of mana you can spend and still win the fight?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.sim.html" title="adventofcode_rust_2015::day22::sim fn">sim</a></div><div class="item-right docblock-short"></div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Spell.html" title="adventofcode_rust_2015::day22::Spell type">Spell</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Stats.html" title="adventofcode_rust_2015::day22::Stats type">Stats</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parse_input",""],["part1","Part 1: How many total square feet of wrapping paper should they order?"],["part2","Part 2: How many total feet of ribbon should they order?"]],"mod":[["day2_part1",""],["day2_part2",""]],"struct":[["Present",""]]});

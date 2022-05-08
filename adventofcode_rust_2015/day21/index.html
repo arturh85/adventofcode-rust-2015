@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 21: RPG Simulator 20XX"><meta name="keywords" content="rust, rustlang, rust-lang, day21"><title>adventofcode_rust_2015::day21 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day21</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section><div id="sidebar-vars" data-name="day21" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day21</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day21.rs.html#1-239">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-21-rpg-simulator-20xx"><a href="#day-21-rpg-simulator-20xx">Day 21: RPG Simulator 20XX</a></h2>
+<p>Little Henry Case got a new video game for Christmas.
+It’s an <a href="https://en.wikipedia.org/wiki/Role-playing_video_game">RPG</a>, and he’s stuck on a boss.
+He needs to know what equipment to buy at the shop.
+He hands you the <a href="https://en.wikipedia.org/wiki/Game_controller">controller</a>.</p>
+<p>In this game, the player (you) and the enemy (the boss) take turns attacking.
+The player always goes first. Each attack reduces the opponent’s hit points by at least <code>1</code>.
+The first character at or below <code>0</code> hit points loses.</p>
+<p>Damage dealt by an attacker each turn is equal to the attacker’s damage score minus the
+defender’s armor score. An attacker always does at least <code>1</code> damage. So, if the attacker has a
+damage score of <code>8</code>, and the defender has an armor score of <code>3</code>, the defender loses
+<code>5</code> hit points. If the defender had an armor score of <code>300</code>, the defender would
+still lose <code>1</code> hit point.</p>
+<p>Your damage score and armor score both start at zero. They can be increased by buying items in
+exchange for gold. You start with no items and have as much gold as you need. Your total damage
+or armor is equal to the sum of those stats from all of your items. You have 100 hit points.</p>
+<p>Here is what the item shop is selling:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Weapons:    Cost  Damage  Armor
+Dagger        8     4       0
+Shortsword   10     5       0
+Warhammer    25     6       0
+Longsword    40     7       0
+Greataxe     74     8       0
+
+Armor:      Cost  Damage  Armor
+Leather      13     0       1
+Chainmail    31     0       2
+Splintmail   53     0       3
+Bandedmail   75     0       4
+Platemail   102     0       5
+
+Rings:      Cost  Damage  Armor
+Damage +1    25     1       0
+Damage +2    50     2       0
+Damage +3   100     3       0
+Defense +1   20     0       1
+Defense +2   40     0       2
+Defense +3   80     0       3</code></pre></div>
+<p>You must buy exactly one weapon; no dual-wielding. Armor is optional, but you can’t use more
+than one. You can buy 0-2 rings (at most one for each hand). You must use any items you buy.
+The shop only has one of each item, so you can’t buy, for example, two rings of Damage +3.</p>
+<p>For example, suppose you have <code>8</code> hit points, <code>5</code> damage, and <code>5</code> armor, and that the boss has
+<code>12</code> hit points, <code>7</code> damage, and <code>2</code> armor:</p>
+<ul>
+<li>The player deals <code>5-2 = 3</code> damage; the boss goes down to 9 hit points.</li>
+<li>The boss deals <code>7-5 = 2</code> damage; the player goes down to 6 hit points.</li>
+<li>The player deals <code>5-2 = 3</code> damage; the boss goes down to 6 hit points.</li>
+<li>The boss deals <code>7-5 = 2</code> damage; the player goes down to 4 hit points.</li>
+<li>The player deals <code>5-2 = 3</code> damage; the boss goes down to 3 hit points.</li>
+<li>The boss deals <code>7-5 = 2</code> damage; the player goes down to 2 hit points.</li>
+<li>The player deals <code>5-2 = 3</code> damage; the boss goes down to 0 hit points.</li>
+</ul>
+<p>In this scenario, the player wins! (Barely.)</p>
+<p>You have 100 hit points. The boss’s actual stats are in your puzzle input.
+<strong>What is the least amount of gold you can spend and still win the fight?</strong></p>
+<h2 id="part-2"><a href="#part-2">Part 2</a></h2>
+<p>Turns out the shopkeeper is working with the boss, and can persuade you to buy whatever items
+he wants. The other rules still apply, and he still only has one of each item.
+<strong>What is the most amount of gold you can spend and still lose the fight?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day21_part1/index.html" title="adventofcode_rust_2015::day21::day21_part1 mod">day21_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day21_part2/index.html" title="adventofcode_rust_2015::day21::day21_part2 mod">day21_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.armor_ring_combos.html" title="adventofcode_rust_2015::day21::armor_ring_combos fn">armor_ring_combos</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.combine.html" title="adventofcode_rust_2015::day21::combine fn">combine</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_player_win.html" title="adventofcode_rust_2015::day21::is_player_win fn">is_player_win</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.max_shop_gold.html" title="adventofcode_rust_2015::day21::max_shop_gold fn">max_shop_gold</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.min_shop_gold.html" title="adventofcode_rust_2015::day21::min_shop_gold fn">min_shop_gold</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day21::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day21::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the least amount of gold you can spend and still win the fight?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day21::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: What is the most amount of gold you can spend and still lose the fight?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.ring_combos.html" title="adventofcode_rust_2015::day21::ring_combos fn">ring_combos</a></div><div class="item-right docblock-short"></div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Item.html" title="adventofcode_rust_2015::day21::Item type">Item</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Stats.html" title="adventofcode_rust_2015::day21::Stats type">Stats</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

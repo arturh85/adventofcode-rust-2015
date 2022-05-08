@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["part1","Part 1: To what floor do the instructions take Santa? procedural style"],["part1_alt1","Part 1 (alt1): To what floor do the instructions take Santa? functional style"],["part2","Part 2: What is the position of the character that causes Santa to first enter the basement?"]],"mod":[["day1_part1",""],["day1_part1_alt1",""],["day1_part2",""]]});

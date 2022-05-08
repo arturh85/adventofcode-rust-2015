@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 5: Doesn’t He Have Intern-Elves For This?"><meta name="keywords" content="rust, rustlang, rust-lang, day5"><title>adventofcode_rust_2015::day5 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day5</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day5" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day5</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day5.rs.html#1-164">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-5-doesnt-he-have-intern-elves-for-this"><a href="#day-5-doesnt-he-have-intern-elves-for-this">Day 5: Doesn’t He Have Intern-Elves For This?</a></h2>
+<p>Santa needs help figuring out which strings in his text file are naughty or nice.</p>
+<p>A nice string is one with all of the following properties:</p>
+<ul>
+<li>It contains at least three vowels (<code>aeiou</code> only), like <code>aei</code>, <code>xazegov</code>, or <code>aeiouaeiouaeiou</code>.</li>
+<li>It contains at least one letter that appears twice in a row, like <code>xx</code>, <code>abcdde</code> (<code>dd</code>),
+or <code>aabbccdd</code> (<code>aa</code>, <code>bb</code>, <code>cc</code>, or <code>dd</code>).</li>
+<li>It does not contain the strings <code>ab</code>, <code>cd</code>, <code>pq</code>, or <code>xy</code>, even if they are part of one of
+the other requirements.</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li><code>ugknbfddgicrmopn</code> is nice because it has at least three vowels (<code>u...i...o...</code>),
+a double letter (<code>...dd...</code>), and none of the disallowed substrings.</li>
+<li><code>aaa</code> is nice because it has at least three vowels and a double letter, even though
+the letters used by different rules overlap.</li>
+<li><code>jchzalrnumimnmhp</code> is naughty because it has no double letter.</li>
+<li><code>haegwjzuvuyypxyu</code> is naughty because it contains the string <code>xy</code>.</li>
+<li><code>dvszwmarrgswjxmb</code> is naughty because it contains only one vowel.</li>
+</ul>
+<p><strong>How many strings are nice?</strong></p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>Realizing the error of his ways, Santa has switched to a better model of determining whether a
+string is naughty or nice. None of the old rules apply, as they are all clearly ridiculous.</p>
+<p>Now, a nice string is one with all of the following properties:</p>
+<ul>
+<li>It contains a pair of any two letters that appears at least twice in the string without
+overlapping, like <code>xyxy</code> (<code>xy</code>) or <code>aabcdefgaa</code> (<code>aa</code>),
+but not like <code>aaa</code> (<code>aa</code>, but it overlaps).</li>
+<li>It contains at least one letter which repeats with exactly one letter between them,
+like <code>xyx</code>, <code>abcdefeghi</code> (<code>efe</code>), or even <code>aaa</code>.</li>
+</ul>
+<p>For example:</p>
+<ul>
+<li><code>qjhvhtzxzqqjkmpb</code> is nice because is has a pair that appears twice (<code>qj</code>) and a letter
+that repeats with exactly one letter between them (<code>zxz</code>).</li>
+<li><code>xxyxx</code> is nice because it has a pair that appears twice and a letter that repeats with one
+between, even though the letters used by each rule overlap.</li>
+<li><code>uurcxstgmygtbstg</code> is naughty because it has a pair (<code>tg</code>) but no repeat with a single
+letter between them.</li>
+<li><code>ieodomkazucvgmuy</code> is naughty because it has a repeating letter with one between (<code>odo</code>),
+but no pair that appears twice.</li>
+</ul>
+<p><strong>How many strings are nice under these new rules?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day5_part1/index.html" title="adventofcode_rust_2015::day5::day5_part1 mod">day5_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day5_part2/index.html" title="adventofcode_rust_2015::day5::day5_part2 mod">day5_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.has_double_letter.html" title="adventofcode_rust_2015::day5::has_double_letter fn">has_double_letter</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.has_invalid.html" title="adventofcode_rust_2015::day5::has_invalid fn">has_invalid</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.has_pair_twice_without_overlapping.html" title="adventofcode_rust_2015::day5::has_pair_twice_without_overlapping fn">has_pair_twice_without_overlapping</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.has_repeat_with_gap.html" title="adventofcode_rust_2015::day5::has_repeat_with_gap fn">has_repeat_with_gap</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.has_three_vowels.html" title="adventofcode_rust_2015::day5::has_three_vowels fn">has_three_vowels</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_nice1.html" title="adventofcode_rust_2015::day5::is_nice1 fn">is_nice1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.is_nice2.html" title="adventofcode_rust_2015::day5::is_nice2 fn">is_nice2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day5::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: How many strings are nice?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day5::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: How many strings are nice under these new rules?</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

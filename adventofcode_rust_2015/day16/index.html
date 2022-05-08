@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 16: Aunt Sue"><meta name="keywords" content="rust, rustlang, rust-lang, day16"><title>adventofcode_rust_2015::day16 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day16</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day16" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day16</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day16.rs.html#1-160">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-16-aunt-sue"><a href="#day-16-aunt-sue">Day 16: Aunt Sue</a></h2>
+<p>Your Aunt Sue has given you a wonderful gift, and you’d like to send her a thank you card.
+However, there’s a small problem: she signed it “From, Aunt Sue”.</p>
+<p>You have 500 Aunts named “Sue”.</p>
+<p>So, to avoid sending the card to the wrong person, you need to figure out which Aunt Sue
+(which you conveniently number 1 to 500, for sanity) gave you the gift.
+You open the present and, as luck would have it, good ol’ Aunt Sue got you a
+My First Crime Scene Analysis Machine! Just what you wanted. Or needed, as the case may be.</p>
+<p>The My First Crime Scene Analysis Machine (MFCSAM for short) can detect a few specific compounds
+in a given sample, as well as how many distinct kinds of those compounds there are.
+According to the instructions, these are what the MFCSAM can detect:</p>
+<ul>
+<li><code>children</code>, by human DNA age analysis.</li>
+<li><code>cats</code>. It doesn’t differentiate individual breeds.</li>
+<li>Several seemingly random breeds of dog:
+<code>[samoyeds](https://en.wikipedia.org/wiki/Samoyed_%28dog%29)</code>,
+<code>[pomeranians](https://en.wikipedia.org/wiki/Pomeranian_%28dog%29)</code>,<br />
+<code>[akitas](https://en.wikipedia.org/wiki/Akita_%28dog%29)</code>, and
+<code>[vizslas](https://en.wikipedia.org/wiki/Vizsla)</code>.</li>
+<li><code>goldfish</code>. No other kinds of fish.</li>
+<li><code>trees</code>, all in one group.</li>
+<li><code>cars</code>, presumably by exhaust or gasoline or something.</li>
+<li><code>perfumes</code>, which is handy, since many of your Aunts Sue wear a few kinds.</li>
+</ul>
+<p>In fact, many of your Aunts Sue have many of these. You put the wrapping from the gift
+into the MFCSAM. It beeps inquisitively at you a few times and then prints out a
+message on <a href="https://en.wikipedia.org/wiki/Ticker_tape">ticker tape</a>:</p>
+<div class="example-wrap"><pre class="language-plain"><code>children: 3
+cats: 7
+samoyeds: 2
+pomeranians: 3
+akitas: 0
+vizslas: 0
+goldfish: 5
+trees: 3
+cars: 2
+perfumes: 1</code></pre></div>
+<p>You make a list of the things you can remember about each Aunt Sue.
+Things missing from your list aren’t zero - you simply don’t remember the value.</p>
+<p><strong>What is the number of the Sue that got you the gift?</strong></p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>As you’re about to send the thank you note, something in the MFCSAM’s instructions catches your
+eye. Apparently, it has an outdated
+<a href="https://www.youtube.com/watch?v=RXJKdh1KZ0w">retroencabulator</a>, and so the output from the
+machine isn’t exact values - some of them indicate ranges.</p>
+<p>In particular, the <code>cats</code> and <code>trees</code> readings indicates that there are greater than that many
+(due to the unpredictable nuclear decay of cat dander and tree pollen), while the
+<code>pomeranians</code> and <code>goldfish</code> readings indicate that there are fewer than that many
+(due to the modial interaction of magnetoreluctance).</p>
+<p><strong>What is the number of the real Aunt Sue?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day16_part1/index.html" title="adventofcode_rust_2015::day16::day16_part1 mod">day16_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day16_part2/index.html" title="adventofcode_rust_2015::day16::day16_part2 mod">day16_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Sue.html" title="adventofcode_rust_2015::day16::Sue struct">Sue</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.find_sue1.html" title="adventofcode_rust_2015::day16::find_sue1 fn">find_sue1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.find_sue2.html" title="adventofcode_rust_2015::day16::find_sue2 fn">find_sue2</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.get_search.html" title="adventofcode_rust_2015::day16::get_search fn">get_search</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day16::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day16::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the number of the Sue that got you the gift?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day16::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: What is the number of the real Aunt Sue?</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

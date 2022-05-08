@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Day 24: It Hangs in the Balance"><meta name="keywords" content="rust, rustlang, rust-lang, day24"><title>adventofcode_rust_2015::day24 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Module day24</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div></section><div id="sidebar-vars" data-name="day24" data-ty="mod" data-relpath="./"></div><script defer src="./sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Module <a href="../index.html">adventofcode_rust_2015</a>::<wbr><a class="mod" href="#">day24</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../../src/adventofcode_rust_2015/day24.rs.html#1-149">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="day-24-it-hangs-in-the-balance"><a href="#day-24-it-hangs-in-the-balance">Day 24: It Hangs in the Balance</a></h2>
+<p>It’s Christmas Eve, and Santa is loading up the sleigh for this year’s deliveries.
+However, there’s one small problem: he can’t get the sleigh to balance.
+If it isn’t balanced, he can’t defy physics, and nobody gets presents this year.</p>
+<p>No pressure.</p>
+<p>Santa has provided you a list of the weights of every package he needs to fit on the sleigh.
+The packages need to be split into three groups of exactly the same weight,
+and every package has to fit. The first group goes in the passenger compartment of the sleigh,
+and the second and third go in containers on either side. Only when all three groups weigh
+exactly the same amount will the sleigh be able to fly. Defying physics has rules, you know!</p>
+<p>Of course, that’s not the only problem. The first group - the one going in the passenger
+compartment - needs as few packages as possible so that Santa has some legroom left over.
+It doesn’t matter how many packages are in either of the other two groups, so long as all of the
+groups weigh the same.</p>
+<p>Furthermore, Santa tells you, if there are multiple ways to arrange the packages such that the
+fewest possible are in the first group, you need to choose the way where the first group has
+the smallest quantum entanglement to reduce the chance of any “complications”. The quantum
+entanglement of a group of packages is the
+<a href="https://en.wikipedia.org/wiki/Product_%28mathematics%29">product</a> of their weights, that is,
+the value you get when you multiply their weights together. Only consider quantum entanglement
+if the first group has the fewest possible number of packages in it and all groups weigh the
+same amount.</p>
+<p>For example, suppose you have ten packages with weights <code>1</code> through <code>5</code> and <code>7</code> through <code>11</code>.
+For this situation, some of the unique first groups, their quantum entanglements, and a way to
+divide the remaining packages are as follows:</p>
+<div class="example-wrap"><pre class="language-plain"><code>Group 1;             Group 2; Group 3
+11 9       (QE= 99); 10 8 2;  7 5 4 3 1
+10 9 1     (QE= 90); 11 7 2;  8 5 4 3
+10 8 2     (QE=160); 11 9;    7 5 4 3 1
+10 7 3     (QE=210); 11 9;    8 5 4 2 1
+10 5 4 1   (QE=200); 11 9;    8 7 3 2
+10 5 3 2   (QE=300); 11 9;    8 7 4 1
+10 4 3 2 1 (QE=240); 11 9;    8 7 5
+9 8 3      (QE=216); 11 7 2;  10 5 4 1
+9 7 4      (QE=252); 11 8 1;  10 5 3 2
+9 5 4 2    (QE=360); 11 8 1;  10 7 3
+8 7 5      (QE=280); 11 9;    10 4 3 2 1
+8 5 4 3    (QE=480); 11 9;    10 7 2 1
+7 5 4 3 1  (QE=420); 11 9;    10 8 2</code></pre></div>
+<p>Of these, although <code>10 9 1</code> has the smallest quantum entanglement (<code>90</code>), the configuration
+with only two packages, <code>11 9</code>, in the passenger compartment gives Santa the most legroom
+and wins. In this situation, the quantum entanglement for the ideal configuration is
+therefore <code>99</code>. Had there been two configurations with only two packages in the first group,
+the one with the smaller quantum entanglement would be chosen.</p>
+<p><strong>What is the quantum entanglement of the first group of packages in the ideal configuration?</strong></p>
+<h2 id="part-two"><a href="#part-two">Part Two</a></h2>
+<p>That’s weird… the sleigh still isn’t balancing.</p>
+<p>“Ho ho ho”, Santa muses to himself. “I forgot the trunk”.</p>
+<p>Balance the sleigh again, but this time, separate the packages into four groups instead
+of three. The other constraints still apply.</p>
+<p>Given the example packages above, this would be some of the new unique first groups,
+their quantum entanglements, and one way to divide the remaining packages:</p>
+<div class="example-wrap"><pre class="language-plain"><code>11 4    (QE=44); 10 5;   9 3 2 1; 8 7
+10 5    (QE=50); 11 4;   9 3 2 1; 8 7
+9 5 1   (QE=45); 11 4;   10 3 2;  8 7
+9 4 2   (QE=72); 11 3 1; 10 5;    8 7
+9 3 2 1 (QE=54); 11 4;   10 5;    8 7
+8 7     (QE=56); 11 4;   10 5;    9 3 2 1
+</code></pre></div>
+<p>Of these, there are three arrangements that put the minimum (two) number of packages
+in the first group: <code>11 4</code>, <code>10 5</code>, and <code>8 7</code>. Of these, <code>11 4</code> has the lowest quantum
+entanglement, and so it is selected.</p>
+<p>Now, <strong>what is the quantum entanglement of the first group of packages in the
+ideal configuration?</strong></p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="day24_part1/index.html" title="adventofcode_rust_2015::day24::day24_part1 mod">day24_part1</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="day24_part2/index.html" title="adventofcode_rust_2015::day24::day24_part2 mod">day24_part2</a></div><div class="item-right docblock-short"></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.find_min_quantum.html" title="adventofcode_rust_2015::day24::find_min_quantum fn">find_min_quantum</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.parse_input.html" title="adventofcode_rust_2015::day24::parse_input fn">parse_input</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part1.html" title="adventofcode_rust_2015::day24::part1 fn">part1</a></div><div class="item-right docblock-short"><p>Part 1: What is the quantum entanglement of the first group of packages in
+the ideal configuration?</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.part2.html" title="adventofcode_rust_2015::day24::part2 fn">part2</a></div><div class="item-right docblock-short"><p>Part 2: what is the quantum entanglement of the first group of packages in
+the ideal configuration?</p>
+</div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>

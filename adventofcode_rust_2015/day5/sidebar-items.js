@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["has_double_letter",""],["has_invalid",""],["has_pair_twice_without_overlapping",""],["has_repeat_with_gap",""],["has_three_vowels",""],["is_nice1",""],["is_nice2",""],["part1","Part 1: How many strings are nice?"],["part2","Part 2: How many strings are nice under these new rules?"]],"mod":[["day5_part1",""],["day5_part2",""]]});

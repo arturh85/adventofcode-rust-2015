@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/day25.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>day25.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../adventofcode_rust_2015/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../adventofcode_rust_2015/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+</pre><pre class="rust"><code><span class="doccomment">//! # [Day 25: Let It Snow](https://adventofcode.com/2015/day/25)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Merry Christmas! Santa is booting up his weather machine; looks like you might get a</span>
+<span class="doccomment">//! [white Christmas](https://adventofcode.com/2015/day/1) after all.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The weather machine beeps! On the console of the machine is a copy protection message asking you</span>
+<span class="doccomment">//! to [enter a code from the instruction manual](https://en.wikipedia.org/wiki/Copy_protection#Early_video_games).</span>
+<span class="doccomment">//! Apparently, it refuses to run unless you give it that code.</span>
+<span class="doccomment">//! No problem; you&#39;ll just look up the code in the--</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &quot;Ho ho ho&quot;, Santa ponders aloud. &quot;I can&#39;t seem to find the manual.&quot;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You look up the support number for the manufacturer and give them a call.</span>
+<span class="doccomment">//! Good thing, too - that 49th star wasn&#39;t going to earn itself.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &quot;Oh, that machine is quite old!&quot;, they tell you. &quot;That model went out of support six minutes</span>
+<span class="doccomment">//! ago, and we just finished shredding all of the manuals. I bet we can find you the</span>
+<span class="doccomment">//! code generation algorithm, though.&quot;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! After putting you on hold for twenty minutes (your call is very important to them, it</span>
+<span class="doccomment">//! reminded you repeatedly), they finally find an engineer that remembers how the code system works.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The codes are printed on an infinite sheet of paper, starting in the top-left corner.</span>
+<span class="doccomment">//! The codes are filled in by diagonals: starting with the first row with an empty first box,</span>
+<span class="doccomment">//! the codes are filled in diagonally up and to the right. This process repeats until the</span>
+<span class="doccomment">//! [infinite paper is covered](https://en.wikipedia.org/wiki/Cantor&#39;s_diagonal_argument). So, the</span>
+<span class="doccomment">//! first few codes are filled in in this order:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```plain</span>
+<span class="doccomment">//!    | 1   2   3   4   5   6</span>
+<span class="doccomment">//! ---+---+---+---+---+---+---+</span>
+<span class="doccomment">//!  1 |  1   3   6  10  15  21</span>
+<span class="doccomment">//!  2 |  2   5   9  14  20</span>
+<span class="doccomment">//!  3 |  4   8  13  19</span>
+<span class="doccomment">//!  4 |  7  12  18</span>
+<span class="doccomment">//!  5 | 11  17</span>
+<span class="doccomment">//!  6 | 16</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For example, the 12th code would be written to row `4`, column `2`; the 15th code would be</span>
+<span class="doccomment">//! written to row `1`, column `5`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The voice on the other end of the phone continues with how the codes are actually generated.</span>
+<span class="doccomment">//! The first code is `20151125`. After that, each code is generated by taking the previous one,</span>
+<span class="doccomment">//! multiplying it by `252533`, and then keeping the remainder from dividing</span>
+<span class="doccomment">//! that value by `33554393`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! So, to find the second code (which ends up in row `2`, column `1`), start with the</span>
+<span class="doccomment">//! previous value, `20151125`. Multiply it by `252533` to get `5088824049625`. Then, divide</span>
+<span class="doccomment">//! that by `33554393`, which leaves a remainder of `31916031`. That remainder is the second code.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &quot;Oh!&quot;, says the voice. &quot;It looks like we missed a scrap from one of the manuals.</span>
+<span class="doccomment">//! Let me read it to you.&quot; You write down his numbers:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```plain</span>
+<span class="doccomment">//!    |    1         2         3         4         5         6</span>
+<span class="doccomment">//! ---+---------+---------+---------+---------+---------+---------+</span>
+<span class="doccomment">//!  1 | 20151125  18749137  17289845  30943339  10071777  33511524</span>
+<span class="doccomment">//!  2 | 31916031  21629792  16929656   7726640  15514188   4041754</span>
+<span class="doccomment">//!  3 | 16080970   8057251   1601130   7981243  11661866  16474243</span>
+<span class="doccomment">//!  4 | 24592653  32451966  21345942   9380097  10600672  31527494</span>
+<span class="doccomment">//!  5 |    77061  17552253  28094349   6899651   9250759  31663883</span>
+<span class="doccomment">//!  6 | 33071741   6796745  25397450  24659492   1534922  27995004</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &quot;Now remember&quot;, the voice continues, &quot;that&#39;s not even all of the first few numbers;</span>
+<span class="doccomment">//! for example, you&#39;re missing the one at 7,1 that would come before 6,2. But, it should be enough</span>
+<span class="doccomment">//! to let your-- oh, it&#39;s time for lunch! Bye!&quot; The call disconnects.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Santa looks nervous. Your puzzle input contains the message on the machine&#39;s console.</span>
+<span class="doccomment">//! **What code do you give the machine?**</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Part Two</span>
+<span class="doccomment">//! The machine springs to life, then falls silent again. It beeps. &quot;Insufficient fuel&quot;, the console</span>
+<span class="doccomment">//! reads. &quot;Fifty stars are required before proceeding. One star is available.&quot;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ...&quot;one star is available&quot;? You check the fuel tank; sure enough, a lone star sits at the</span>
+<span class="doccomment">//! bottom, awaiting its friends. Looks like you need to provide 49 yourself.</span>
+
+<span class="kw">use</span> <span class="ident">regex::Regex</span>;
+
+<span class="attribute">#[<span class="ident">aoc_generator</span>(<span class="ident">day25</span>)]</span>
+<span class="kw">fn</span> <span class="ident">parse_input</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; (<span class="ident">u64</span>, <span class="ident">u64</span>) {
+    <span class="kw">let</span> <span class="ident">regex</span> <span class="op">=</span> <span class="ident">Regex::new</span>(<span class="string">&quot;To continue, please consult the code grid in the manual.  Enter the code at row (?P&lt;row&gt;\\d+), column (?P&lt;column&gt;\\d+).&quot;</span>).<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">regex</span>.<span class="ident">captures</span>(<span class="ident">input</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>();
+    (
+        <span class="ident">matches</span>.<span class="ident">name</span>(<span class="string">&quot;row&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="ident">matches</span>.<span class="ident">name</span>(<span class="string">&quot;column&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">as_str</span>().<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+    )
+}
+
+<span class="doccomment">/// Part 1: What code do you give the machine?</span>
+<span class="attribute">#[<span class="ident">aoc</span>(<span class="ident">day25</span>, <span class="ident">part1</span>)]</span>
+<span class="kw">fn</span> <span class="ident">part1</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span>(<span class="ident">u64</span>, <span class="ident">u64</span>)) -&gt; <span class="ident">u64</span> {
+    <span class="ident">code_at</span>(<span class="ident">input</span>)
+}
+
+<span class="kw">fn</span> <span class="ident">code_at</span>(<span class="ident">pos</span>: <span class="kw-2">&amp;</span>(<span class="ident">u64</span>, <span class="ident">u64</span>)) -&gt; <span class="ident">u64</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cursor</span> <span class="op">=</span> (<span class="number">1</span>, <span class="number">1</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">value</span> <span class="op">=</span> <span class="number">20151125</span>;
+    <span class="kw">loop</span> {
+        <span class="kw">if</span> <span class="ident">cursor</span> <span class="op">==</span> <span class="kw-2">*</span><span class="ident">pos</span> {
+            <span class="kw">return</span> <span class="ident">value</span>;
+        }
+        <span class="kw">if</span> <span class="ident">cursor</span>.<span class="number">0</span> <span class="op">&gt;</span> <span class="number">1</span> {
+            <span class="ident">cursor</span>.<span class="number">0</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="ident">cursor</span>.<span class="number">1</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+        } <span class="kw">else</span> {
+            <span class="ident">cursor</span>.<span class="number">0</span> <span class="op">=</span> <span class="ident">cursor</span>.<span class="number">1</span> <span class="op">+</span> <span class="number">1</span>;
+            <span class="ident">cursor</span>.<span class="number">1</span> <span class="op">=</span> <span class="number">1</span>;
+        }
+        <span class="ident">value</span> <span class="kw-2">*</span><span class="op">=</span> <span class="number">252533</span>;
+        <span class="ident">value</span> <span class="op">%</span><span class="op">=</span> <span class="number">33554393</span>;
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part1_examples</span>() {
+        <span class="macro">assert_eq!</span>(<span class="number">20151125</span>, <span class="ident">code_at</span>(<span class="kw-2">&amp;</span>(<span class="number">1</span>, <span class="number">1</span>)));
+        <span class="macro">assert_eq!</span>(<span class="number">31916031</span>, <span class="ident">code_at</span>(<span class="kw-2">&amp;</span>(<span class="number">2</span>, <span class="number">1</span>)));
+        <span class="macro">assert_eq!</span>(<span class="number">18749137</span>, <span class="ident">code_at</span>(<span class="kw-2">&amp;</span>(<span class="number">1</span>, <span class="number">2</span>)));
+        <span class="macro">assert_eq!</span>(<span class="number">16080970</span>, <span class="ident">code_at</span>(<span class="kw-2">&amp;</span>(<span class="number">3</span>, <span class="number">1</span>)));
+    }
+}
+</code></pre></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="adventofcode_rust_2015" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0 (7737e0b5c 2022-04-04)" ></div>
+</body></html>
