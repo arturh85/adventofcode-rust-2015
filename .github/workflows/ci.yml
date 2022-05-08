@@ -41,6 +41,8 @@ jobs:
           output_dir: public/times/
           images_dir: markdown
           build_html: true
+      - name: 🚀 replace title in times.html
+        run: sed -i "s/<title>times<\/title>/<title>Advent of Code 2015 Execution times<\/title>/g" public/times/times.html
       - name: 📦 deploy public to gh-pages
         uses: peaceiris/actions-gh-pages@364c31d33bb99327c77b3a5438a83a357a6729ad # v3.4.0
         with:

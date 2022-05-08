@@ -17,7 +17,7 @@ function aoc () {
     fi
     echo "## Day $1 Part $2" >> times.md
     cat "times-$1-$2.md" >> times.md
-    echo "Generating flamegraph for Day $1 Part $2"
+    echo "::group::{Generating flamegraph for Day $1 Part $2}"
     time timeout -k $KILL_TIMEOUT $TERM_TIMEOUT cargo aoc flamegraph -d "$1" -p "$2" > /dev/null 2>&1
     if test -f "target/aoc/aoc-autobench/flamegraph.svg"; then
       mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph-day$1-$2.svg"
@@ -26,6 +26,7 @@ function aoc () {
     else
       echo "- 🤯 Flame Graph generation took longer than three minutes." >> times.md
     fi
+    echo "::endgroup::"
   fi
 }
 
@@ -36,7 +37,7 @@ echo "- 🚀 Benchmarked using [Github Actions](https://github.com/features/acti
 echo "## Distribution" >> times.md
 echo "![Pie Chart](PIECHART)" >> times.md
 
-for (( i = 1; i <= 24; i++ )); do
+for (( i = 1; i <= 25; i++ )); do
   aoc "$i" 1
   aoc "$i" 2
 done

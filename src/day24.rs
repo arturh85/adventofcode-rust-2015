@@ -95,30 +95,18 @@ fn parse_input(input: &str) -> Vec<u64> {
 /// the ideal configuration?
 #[aoc(day24, part1)]
 fn part1(input: &[u64]) -> u64 {
-    let group_sum = input.iter().sum::<u64>() / 3;
-    let mut min_quantum_energy = u64::MAX;
-    let mut min_quantum_energy_len = usize::MAX;
-    for i in 2..input.len() / 2 {
-        for comb in input.iter().combinations(i) {
-            if comb.iter().map(|n| **n).sum::<u64>() == group_sum {
-                let quantum_energy = comb.iter().map(|n| **n).product();
-                if quantum_energy < min_quantum_energy && comb.len() <= min_quantum_energy_len {
-                    min_quantum_energy = quantum_energy;
-                    min_quantum_energy_len = comb.len();
-                    break;
-                }
-            }
-        }
-    }
-
-    min_quantum_energy // 11846773891
+    find_min_quantum(input, 3)
 }
 
 /// Part 2: what is the quantum entanglement of the first group of packages in
 /// the ideal configuration?
 #[aoc(day24, part2)]
 fn part2(input: &[u64]) -> u64 {
-    let group_sum = input.iter().sum::<u64>() / 4;
+    find_min_quantum(input, 4)
+}
+
+fn find_min_quantum(input: &[u64], groups: u64) -> u64 {
+    let group_sum = input.iter().sum::<u64>() / groups;
     let mut min_quantum_energy = u64::MAX;
     let mut min_quantum_energy_len = usize::MAX;
     for i in 2..input.len() / 2 {
@@ -158,9 +146,4 @@ mod tests {
         // In this situation, the quantum entanglement for the ideal configuration is therefore 99
         assert_eq!(99, part1(&parse_input(EXAMPLE)));
     }
-
-    // #[test]
-    // fn part2_examples() {
-    //     assert_eq!(0, part2(&parse_input(EXAMPLE)));
-    // }
 }
