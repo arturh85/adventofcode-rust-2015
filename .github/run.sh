@@ -8,7 +8,7 @@ sudo sh -c 'echo -1 >/proc/sys/kernel/perf_event_paranoid'
 
 function aoc () {
   nl=$'\n'
-  echo "Running Day $1 Part $2"
+  echo "::group::{Running Day $1 Part $2}"
   cargo aoc -d "$1" -p "$2" | grep -v "AOC $AOC_YEAR" | sed "s/Day $1 - Part $2/### Result/g" | sed 's/,/ /g' | sed 's/generator/'"\\${nl}"'- generator/g' | sed 's/runner/'"\\${nl}"'- runner/g' > "times-$1-$2.md"
   if test -s "times-$1-$2.md"; then
     if [ "$2" == "1" ]; then
@@ -17,7 +17,7 @@ function aoc () {
     fi
     echo "## Day $1 Part $2" >> times.md
     cat "times-$1-$2.md" >> times.md
-    echo "::group::{Generating flamegraph for Day $1 Part $2}"
+    echo "Generating flamegraph for Day $1 Part $2"
     time timeout -k $KILL_TIMEOUT $TERM_TIMEOUT cargo aoc flamegraph -d "$1" -p "$2" > /dev/null 2>&1
     if test -f "target/aoc/aoc-autobench/flamegraph.svg"; then
       mv "target/aoc/aoc-autobench/flamegraph.svg" "flamegraph-day$1-$2.svg"
@@ -26,8 +26,8 @@ function aoc () {
     else
       echo "- 🤯 Flame Graph generation took longer than three minutes." >> times.md
     fi
-    echo "::endgroup::"
   fi
+  echo "::endgroup::"
 }
 
 echo "# Execution times for Advent of Code $AOC_YEAR" > times.md
